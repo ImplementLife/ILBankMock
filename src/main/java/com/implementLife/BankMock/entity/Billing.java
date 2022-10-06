@@ -1,5 +1,11 @@
 package com.implementLife.BankMock.entity;
 
+import java.util.UUID;
+
 public class Billing {
-    private Long id;
+    private UUID id;
+
+    private BankAccount bankAccountReceiver;
+
+    private String sum;
 }

@@ -1,4 +1,5 @@
 package com.implementLife.BankMock.controller.dto;
 
-public interface BankAccountDto {
+public class PersonalInfoRequest {
+
 }
