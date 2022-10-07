@@ -12,9 +12,28 @@ public class Client {
     private String phoneNumber;
     private String email;
 
+    private String pass;
+    private String roles;
+
     private List<BankAccount> bankAccounts;
 
     public Client() {
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     public UUID getId() {
