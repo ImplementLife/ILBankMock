@@ -1,6 +1,5 @@
 package com.implementLife.BankMock.config.swagger;
 
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +38,7 @@ public class SwaggerConfig {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", "JSESSIONID", "header");
+        return new ApiKey("JWT", "JSESSIONID", "cookie");
     }
 
     private SecurityContext securityContext() {
@@ -47,6 +46,7 @@ public class SwaggerConfig {
     }
 
     private List<SecurityReference> defaultAuth() {
+        List<AuthorizationScope> authorizationScopes1 = Arrays.asList(new AuthorizationScope("global", "accessEverything"));
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;

@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public class ClientSec implements UserDetails {
-    private Client client;
+    private final Client client;
     private Set<Role> roles;
 
     public void setRoles(Set<Role> roles) {
