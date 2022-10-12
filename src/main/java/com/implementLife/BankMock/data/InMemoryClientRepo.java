@@ -24,6 +24,7 @@ public class InMemoryClientRepo implements ClientRepo {
         client.setId(UUID.randomUUID());
         client.setPass(pass);
         client.setPhoneNumber(phone);
+        client.setRoles("U");
 
         save(client);
 
