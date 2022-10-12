@@ -29,9 +29,9 @@ public enum Role implements GrantedAuthority {
     }
 
     public static Role getById(char id) {
-        if (NONE.id == id) return NONE;
-        if (USER.id == id) return USER;
-        if (ADMIN.id == id) return ADMIN;
+        for (Role value : values()) {
+            if (value.id == id) return value;
+        }
         throw new IllegalArgumentException("Not exist role with id=" + id);
     }
 }

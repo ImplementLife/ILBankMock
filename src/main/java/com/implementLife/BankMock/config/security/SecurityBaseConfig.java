@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
-public class SecurityBaseConfig /*extends WebSecurityConfigurerAdapter*/ {
+public class SecurityBaseConfig {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityBaseConfig.class);
 
     @Bean
@@ -39,14 +39,15 @@ public class SecurityBaseConfig /*extends WebSecurityConfigurerAdapter*/ {
 //        return authenticationManagerBuilder.build();
 //    }
 
-//    @Bean
-//    public AccessDeniedHandler customAccessDeniedHandler() {
-//        return new CustomAccessDeniedHandler();
-//    }
+    @Bean
+    public AccessDeniedHandler customAccessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity https) throws Exception {
         https
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(a -> a
                 .antMatchers("/api/**").hasRole("USER")
                 .antMatchers("/profile/**").hasRole("USER")
@@ -63,31 +64,11 @@ public class SecurityBaseConfig /*extends WebSecurityConfigurerAdapter*/ {
             )
             .logout(l -> l
                 .logoutSuccessUrl("/login").permitAll()
+            )
+            .exceptionHandling(e -> e
+                .accessDeniedPage("/ad")
             );
         return https.build();
     }
 
-    /*@Override
-    protected void configure(HttpSecurity https) throws Exception {
-        https
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeRequests(a -> a
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/api/**").hasRole("USER")
-//                .antMatchers("/**").hasRole("R")
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(fl -> fl
-                .loginPage("/login")
-                .loginProcessingUrl("/j_spring_security_check")
-                .failureUrl("/login?error")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .permitAll()
-            )
-            .logout(l -> l
-                .logoutSuccessUrl("/login").permitAll()
-            );
-    }*/
 }
