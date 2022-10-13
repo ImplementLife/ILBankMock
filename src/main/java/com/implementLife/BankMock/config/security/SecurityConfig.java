@@ -4,18 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
-public class SecurityBaseConfig {
-    private static final Logger LOG = LoggerFactory.getLogger(SecurityBaseConfig.class);
+public class SecurityConfig {
+    private static final Logger LOG = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Bean
     public PasswordEncoder bCryptPasswordEncoder() {
@@ -32,18 +28,6 @@ public class SecurityBaseConfig {
         };
     }
 
-//    @Bean
-//    public AuthenticationManager authManager(HttpSecurity http, CustomAuthenticationProvider authProvider) throws Exception {
-//        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder.authenticationProvider(authProvider);
-//        return authenticationManagerBuilder.build();
-//    }
-
-    @Bean
-    public AccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity https) throws Exception {
         https
@@ -56,17 +40,17 @@ public class SecurityBaseConfig {
             )
             .formLogin(fl -> fl
                 .loginPage("/login")
-                .loginProcessingUrl("/j_spring_security_check")
+                .loginProcessingUrl("/login")
                 .failureUrl("/login?error")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
+                .usernameParameter("identification_key")
+                .passwordParameter("password")
                 .permitAll()
             )
             .logout(l -> l
-                .logoutSuccessUrl("/login").permitAll()
+                .logoutSuccessUrl("/logout").permitAll()
             )
             .exceptionHandling(e -> e
-                .accessDeniedPage("/ad")
+                .accessDeniedPage("/access-denied")
             );
         return https.build();
     }
