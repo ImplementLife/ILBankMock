@@ -5,22 +5,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityBaseConfig extends WebSecurityConfigurerAdapter {
-    private static final Logger LOG = LoggerFactory.getLogger(SecurityBaseConfig.class);
+public class SecurityConfig {
+    private static final Logger LOG = LoggerFactory.getLogger(SecurityConfig.class);
+
     @Bean
     public PasswordEncoder bCryptPasswordEncoder() {
         return new PasswordEncoder() {
             @Override
             public String encode(CharSequence rawPassword) {
-                String s = rawPassword.toString();
-                LOG.info(s);
-                LOG.info((String) rawPassword);
-                return s;
+                return (String) rawPassword;
             }
 
             @Override
@@ -30,27 +28,31 @@ public class SecurityBaseConfig extends WebSecurityConfigurerAdapter {
         };
     }
 
-    @Override
-    protected void configure(HttpSecurity https) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity https) throws Exception {
         https
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(a -> a
-                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/**").hasRole("USER")
-//                .antMatchers("/**").hasRole("R")
+                .antMatchers("/profile/**").hasRole("USER")
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(fl -> fl
                 .loginPage("/login")
-                .loginProcessingUrl("/j_spring_security_check")
+                .loginProcessingUrl("/login")
                 .failureUrl("/login?error")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
+                .usernameParameter("identification_key")
+                .passwordParameter("password")
                 .permitAll()
             )
             .logout(l -> l
-                .logoutSuccessUrl("/login").permitAll()
+                .logoutSuccessUrl("/logout").permitAll()
+            )
+            .exceptionHandling(e -> e
+                .accessDeniedPage("/access-denied")
             );
+        return https.build();
     }
+
 }

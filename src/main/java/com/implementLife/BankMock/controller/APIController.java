@@ -25,6 +25,7 @@ public interface APIController {
 
     @Operation(responses = {
         @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "302", description = "redirect to login"),
         @ApiResponse(responseCode = "403")
     })
     @GetMapping("getClientAccountInfo")
