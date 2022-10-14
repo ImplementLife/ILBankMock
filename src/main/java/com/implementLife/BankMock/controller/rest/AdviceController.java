@@ -1,4 +1,4 @@
-package com.implementLife.BankMock.controller;
+package com.implementLife.BankMock.controller.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;

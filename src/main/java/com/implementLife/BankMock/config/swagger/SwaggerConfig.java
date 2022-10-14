@@ -26,11 +26,11 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-            .securityContexts(Arrays.asList(securityContext()))
-            .securitySchemes(Arrays.asList(apiKey()))
+        return new Docket(DocumentationType.OAS_30)
+            .securityContexts(List.of(securityContext()))
+            .securitySchemes(List.of(apiKey()))
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.implementLife.BankMock.controller"))
+            .apis(RequestHandlerSelectors.basePackage("com.implementLife.BankMock.controller.rest"))
             .paths(PathSelectors.any())
             .build()
             .useDefaultResponseMessages(false)
@@ -38,7 +38,7 @@ public class SwaggerConfig {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", "JSESSIONID", "cookie");
+        return new ApiKey("JWT", "JSESSIONID", "header");
     }
 
     private SecurityContext securityContext() {
@@ -46,11 +46,11 @@ public class SwaggerConfig {
     }
 
     private List<SecurityReference> defaultAuth() {
-        List<AuthorizationScope> authorizationScopes1 = Arrays.asList(new AuthorizationScope("global", "accessEverything"));
+        List<AuthorizationScope> authorizationScopes1 = List.of(new AuthorizationScope("global", "accessEverything"));
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+        return List.of(new SecurityReference("JWT", authorizationScopes));
     }
 
     private ApiInfo apiInfo() {

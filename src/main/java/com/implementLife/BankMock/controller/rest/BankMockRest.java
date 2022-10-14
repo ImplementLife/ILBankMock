@@ -1,4 +1,4 @@
-package com.implementLife.BankMock.controller;
+package com.implementLife.BankMock.controller.rest;
 
 import com.implementLife.BankMock.controller.dto.ClientResponse;
 import com.implementLife.BankMock.controller.dto.CreateBillingRequest;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class APIControllerImpl implements APIController {
+public class BankMockRest implements APIController {
     @Autowired
     private ClientRepo clientRepo;
 

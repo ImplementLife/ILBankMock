@@ -1,16 +1,24 @@
-package com.implementLife.BankMock.controller;
+package com.implementLife.BankMock.controller.rest;
 
 import com.implementLife.BankMock.controller.dto.ClientResponse;
 import com.implementLife.BankMock.controller.dto.CreateBillingRequest;
 import com.implementLife.BankMock.controller.dto.PayBillingRequest;
 import com.implementLife.BankMock.entity.Client;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+//@SecurityRequirement(name = "Session cookie", scopes = {"JSESSIONID"})
+@ApiResponse(
+    responseCode = "403",
+    content = {@Content(schema = @Schema(hidden = true))}
+)
 
 @RequestMapping("/api")
 public interface APIController {
@@ -30,7 +38,7 @@ public interface APIController {
     })
     @GetMapping("getClientAccountInfo")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<ClientResponse> getClientAccountInfo(String phone);
+    ResponseEntity<ClientResponse> getClientAccountInfo(@RequestBody String phone);
 
 
     @Operation(responses = {
@@ -39,7 +47,7 @@ public interface APIController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("createBankAccount")
-    void createBankAccount(String clientId, String CurrencyId);
+    void createBankAccount(@RequestBody String clientId, String CurrencyId);
 
 
     @Operation(responses = {
@@ -48,7 +56,7 @@ public interface APIController {
     })
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("updatePersonalInfo")
-    ResponseEntity<String> updatePersonalInfo(Client personalInfo);
+    ResponseEntity<String> updatePersonalInfo(@Valid @RequestBody Client personalInfo);
 
 
     @Operation(responses = {
