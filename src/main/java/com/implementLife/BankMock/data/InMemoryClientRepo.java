@@ -1,5 +1,6 @@
 package com.implementLife.BankMock.data;
 
+import com.implementLife.BankMock.config.security.Role;
 import com.implementLife.BankMock.entity.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,8 @@ public class InMemoryClientRepo implements ClientRepo {
     }
     private void create(String phone, String pass) {
         Client client = new Client();
-        client.setId(UUID.randomUUID());
         client.setPass(pass);
         client.setPhoneNumber(phone);
-        client.setRoles("U");
 
         save(client);
 
@@ -33,6 +32,8 @@ public class InMemoryClientRepo implements ClientRepo {
 
     @Override
     public Client save(Client client) {
+        client.setRoles(String.valueOf((Role.USER.getId())));
+        client.setId(UUID.randomUUID());
         accounts.put(client.getPhoneNumber(), client);
         return client;
     }
