@@ -3,22 +3,20 @@ package com.implementLife.BankMock.controller;
 import com.implementLife.BankMock.data.ClientRepo;
 import com.implementLife.BankMock.entity.Client;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginUIController {
     @Autowired
     private ClientRepo clientRepo;
 
-    @ResponseBody
-    @PostMapping("/registration")
-    public ResponseEntity<String> registration(@RequestBody Client client) {
+    @PostMapping("/reg")
+    public String registration(@ModelAttribute Client client, @RequestParam(defaultValue = "/") String referer) {
         Client savedClient = clientRepo.save(client);
-        return ResponseEntity.ok("done");
+        return "redirect:" + referer;
     }
 
 

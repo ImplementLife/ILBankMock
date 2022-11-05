@@ -34,7 +34,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(a -> a
                 .antMatchers("/api/**").hasRole("USER")
-                .antMatchers("/profile/**").hasRole("USER")
+                .antMatchers("/profile/**").hasAnyRole("USER", "ADMIN", "MANAGER")
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             )
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout(l -> l
-                .logoutSuccessUrl("/logout").permitAll()
+                .logoutSuccessUrl("/login").permitAll()
             )
             .exceptionHandling(e -> e
                 .accessDeniedPage("/access-denied")
