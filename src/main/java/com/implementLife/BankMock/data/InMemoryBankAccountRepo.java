@@ -14,6 +14,7 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryBankAccountRepo.class);
     private final Map<UUID, BankAccount> bankAccountsById = new TreeMap<>();
     private final Map<String, BankAccount> bankAccountsByCode16x = new TreeMap<>();
+    private final Map<String, BankAccount> bankAccountsByIban = new TreeMap<>();
 
     private final Map<UUID, BankAccountCreateOrder> ordersById = new TreeMap<>();
     private final Map<UUID, List<BankAccountCreateOrder>> ordersByClientId = new TreeMap<>();
@@ -36,9 +37,21 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
         }
     }
 
+    private String createPrimaryIban() {
+        String code = "UA" +
+            String.format("%016d", (long) (Math.random() * 9999_9999_9999_9999L)) +
+            String.format("%016d", (long) (Math.random() * 9999_9999_999L));
+        if (bankAccountsByIban.containsKey(code)) {
+            return createPrimaryIban();
+        } else {
+            return code;
+        }
+    }
+
     private void save(BankAccount bankAccount) {
         bankAccountsById.put(bankAccount.getId(), bankAccount);
         bankAccountsByCode16x.put(bankAccount.getCode16x(), bankAccount);
+        bankAccountsByCode16x.put(bankAccount.getIban(), bankAccount);
     }
 
     @Override
@@ -47,6 +60,7 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
         bankAccount.setId(createPrimaryId());
         bankAccount.setCode16x(createPrimaryCode16x());
         bankAccount.setCodeCvv(String.format("%03d", (int) (Math.random() * 999L)));
+        bankAccount.setIban(createPrimaryIban());
         bankAccount.setName("Картка Універсальна");
         bankAccount.setDateCreate(new Date());
         bankAccount.setCurrency(new Currency("$"));

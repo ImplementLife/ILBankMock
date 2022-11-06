@@ -3,6 +3,7 @@ package com.implementLife.BankMock.entity;
 import com.implementLife.BankMock.controller.dto.ClientPersonalInfoRequest;
 import com.implementLife.BankMock.controller.dto.ClientResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,14 +20,23 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     private String roles;
 
     private List<BankAccount> bankAccounts;
+    private List<BusinessApp> businessApps;
 
     public Client() {
+        bankAccounts = new ArrayList<>();
+        businessApps = new ArrayList<>();
+    }
+
+    public List<BusinessApp> getBusinessApps() {
+        return businessApps;
+    }
+    public void setBusinessApps(List<BusinessApp> businessApps) {
+        this.businessApps = businessApps;
     }
 
     public String getRoles() {
         return roles;
     }
-
     public void setRoles(String roles) {
         this.roles = roles;
     }
@@ -34,7 +44,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public String getPass() {
         return pass;
     }
-
     public void setPass(String pass) {
         this.pass = pass;
     }
@@ -42,7 +51,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public UUID getId() {
         return id;
     }
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -50,7 +58,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -58,7 +65,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public List<BankAccount> getBankAccounts() {
         return bankAccounts;
     }
-
     public void setBankAccounts(List<BankAccount> bankAccounts) {
         this.bankAccounts = bankAccounts;
     }
@@ -66,7 +72,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -74,7 +79,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -82,7 +86,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public String getMiddleName() {
         return middleName;
     }
-
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
@@ -90,7 +93,6 @@ public class Client implements ClientPersonalInfoRequest, ClientResponse {
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }

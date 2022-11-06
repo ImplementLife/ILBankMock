@@ -6,22 +6,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class ClientSec implements UserDetails {
     private final Client client;
     private Set<Role> roles;
+    private String rolesAsString;
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-        fillRolesIdInClient();
+        fillRolesStringClient();
     }
     public void addRole(Role role) {
         this.roles.add(role);
-        fillRolesIdInClient();
+        fillRolesStringClient();
     }
 
-    private void fillRole() {
+    private void fillRoles() {
         if (this.roles != null) {
             this.roles = new HashSet<>(this.roles);
         } else {
@@ -35,7 +37,7 @@ public class ClientSec implements UserDetails {
         }
     }
 
-    private void fillRolesIdInClient() {
+    private void fillRolesStringClient() {
         StringBuilder rolesIdStringBuilder = new StringBuilder();
         for (Role role : this.roles) {
             rolesIdStringBuilder.append(role.getId());
@@ -45,7 +47,8 @@ public class ClientSec implements UserDetails {
 
     public ClientSec(Client client) {
         this.client = client;
-        fillRole();
+        this.rolesAsString = client.getRoles();
+        fillRoles();
     }
 
     public Client getClient() {
@@ -54,6 +57,9 @@ public class ClientSec implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (!Objects.equals(this.rolesAsString, client.getRoles())) {
+            fillRoles();
+        }
         return roles;
     }
 

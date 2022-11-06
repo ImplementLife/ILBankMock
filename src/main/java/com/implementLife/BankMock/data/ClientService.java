@@ -14,4 +14,8 @@ public interface ClientService {
     boolean createOrder(Client client);
 
     boolean processingCreateOrder(UUID idOrder, String action);
+
+    void addBusinessRole(Client client);
+
+    void registerBusinessApp(Client client, String name);
 }

@@ -33,6 +33,13 @@ public class BankAccount {
         this.id = id;
     }
 
+    public String getIban() {
+        return iban;
+    }
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
     public Currency getCurrency() {
         return currency;
     }

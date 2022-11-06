@@ -1,9 +1,7 @@
 package com.implementLife.BankMock.data;
 
-import com.implementLife.BankMock.entity.BankAccount;
-import com.implementLife.BankMock.entity.BankAccountAction;
-import com.implementLife.BankMock.entity.BankAccountCreateOrder;
-import com.implementLife.BankMock.entity.Client;
+import com.implementLife.BankMock.config.security.Role;
+import com.implementLife.BankMock.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -125,5 +123,23 @@ public class ClientServiceImpl implements ClientService {
             throw new IllegalArgumentException("Not exist action");
         }
         return true;
+    }
+
+    @Override
+    public void addBusinessRole(Client client) {
+        String roles = client.getRoles();
+        if (!roles.contains("" + Role.BUSINESS_USER.getId())) {
+            client.setRoles(roles + Role.BUSINESS_USER.getId());
+        }
+    }
+
+    @Override
+    public void registerBusinessApp(Client client, String name) {
+        BusinessApp businessApp = new BusinessApp();
+        businessApp.setId(UUID.randomUUID());
+        businessApp.setAccessApiToken(UUID.randomUUID());
+        businessApp.setName(name);
+        businessApp.setClient(client);
+        client.getBusinessApps().add(businessApp);
     }
 }

@@ -22,43 +22,6 @@ import javax.validation.Valid;
 
 @RequestMapping("/api")
 public interface APIController {
-
-    @Operation(responses = {
-        @ApiResponse(responseCode = "201"),
-        @ApiResponse(responseCode = "403")
-    })
-    @PostMapping("createClientAccount")
-    @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<String> createClientAccount(@RequestBody Client personalInfo);
-
-    @Operation(responses = {
-        @ApiResponse(responseCode = "200"),
-        @ApiResponse(responseCode = "302", description = "redirect to login"),
-        @ApiResponse(responseCode = "403")
-    })
-    @GetMapping("getClientAccountInfo")
-    @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<ClientResponse> getClientAccountInfo(@RequestBody String phone);
-
-
-    @Operation(responses = {
-        @ApiResponse(responseCode = "201"),
-        @ApiResponse(responseCode = "403")
-    })
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("createBankAccount")
-    void createBankAccount(@RequestBody String clientId, String CurrencyId);
-
-
-    @Operation(responses = {
-        @ApiResponse(responseCode = "200"),
-        @ApiResponse(responseCode = "403")
-    })
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("updatePersonalInfo")
-    ResponseEntity<String> updatePersonalInfo(@Valid @RequestBody Client personalInfo);
-
-
     @Operation(responses = {
         @ApiResponse(responseCode = "201"),
         @ApiResponse(responseCode = "403")
@@ -75,5 +38,4 @@ public interface APIController {
     @PostMapping("payBilling")
     void payBilling(@Valid @RequestBody PayBillingRequest request);
 
-    
 }

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,7 +44,6 @@ public class InMemoryClientRepo implements ClientRepo {
         client.setPhoneNumber(phone);
         client.setRoles("" + id);
         client.setId(UUID.randomUUID());
-        client.setBankAccounts(new ArrayList<>());
 
         finalSave(client);
 
@@ -61,7 +59,6 @@ public class InMemoryClientRepo implements ClientRepo {
     public Client save(Client client) {
         client.setRoles(String.valueOf((Role.USER.getId())));
         client.setId(UUID.randomUUID());
-        client.setBankAccounts(new ArrayList<>());
         finalSave(client);
         return client;
     }
