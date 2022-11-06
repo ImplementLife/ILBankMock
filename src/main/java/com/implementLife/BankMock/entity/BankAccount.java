@@ -8,6 +8,7 @@ public class BankAccount {
     private UUID id;
     private String code16x;
     private String codeCvv;
+    private String iban;
 
     private Currency currency;
     private long sumBanknote;

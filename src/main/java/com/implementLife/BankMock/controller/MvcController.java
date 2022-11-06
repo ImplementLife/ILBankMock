@@ -1,7 +1,9 @@
 package com.implementLife.BankMock.controller;
 
 import com.implementLife.BankMock.config.security.ClientSec;
+import com.implementLife.BankMock.config.security.Role;
 import com.implementLife.BankMock.controller.dto.PayRequest;
+import com.implementLife.BankMock.data.BankAccountRepo;
 import com.implementLife.BankMock.data.ClientService;
 import com.implementLife.BankMock.entity.BankAccountAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import java.util.UUID;
 public class MvcController {
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private BankAccountRepo bankAccountRepo;
 
     @GetMapping("/")
     public String main() {
@@ -31,13 +35,26 @@ public class MvcController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (ClientSec) authentication.getPrincipal();
     }
+    private void err(Runnable run, Model model, String message) {
+        try {
+            run.run();
+            model.addAttribute("message", message);
+        } catch (Exception e) {
+            model.addAttribute("error", true);
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+    }
 
     @GetMapping("/profile")
     public String profile(Model model) {
         ClientSec clientSec = getSec();
 
         clientSec.getAuthorities().forEach(e -> model.addAttribute(e.getAuthority(), true));
+
         model.addAttribute("client", clientSec.getClient());
+        if (clientSec.getAuthorities().contains(Role.MANAGER)) {
+            model.addAttribute("ordersOnReview", bankAccountRepo.getAllOrdersOnReview());
+        }
         return "user/profile";
     }
 
@@ -53,17 +70,29 @@ public class MvcController {
     @GetMapping("/profile/pay")
     public String bankAccountHistory(Model model) {
         ClientSec clientSec = getSec();
+        model.addAttribute("bankAccounts", clientSec.getClient().getBankAccounts());
         return "user/pay";
     }
 
     @PostMapping("/profile/pay")
     public String pay(@ModelAttribute PayRequest payRequest, Model model) {
-        try {
-            clientService.pay(getSec().getClient().getId(), payRequest.getCode16xCurrentClient(), payRequest.getCode16xOtherClient(), payRequest.getSum());
-        } catch (Exception e) {
-            model.addAttribute("error", true);
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-        return "user/payResult";
+        err(() -> clientService.pay(
+            getSec().getClient().getId(),
+            payRequest.getCode16xCurrentClient(),
+            payRequest.getCode16xOtherClient(),
+            payRequest.getSum()), model, "Платіж успішно оброблено");
+        return "user/result";
+    }
+
+    @GetMapping("/profile/requestBankAccount")
+    public String requestOrder(Model model) {
+        err(() -> clientService.createOrder(getSec().getClient()), model, "Заявку надіслано");
+        return "user/result";
+    }
+
+    @GetMapping("/manager/processingOrder")
+    public String getListOrders(@RequestParam String id, @RequestParam String act, Model model) {
+        err(() -> clientService.processingCreateOrder(UUID.fromString(id), act), model, "Заявку оброблено");
+        return "user/result";
     }
 }

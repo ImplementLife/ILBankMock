@@ -10,9 +10,11 @@
     <div class="container">
         <div class="justify-content-center">
             <div class="mt-3">
-                <div th:unless="${error}">Платіж успішно оброблено</div>
-                <div th:if="${error}" th:text="${errorMessage}"></div>
-                <div><a href="/profile">Повернутись до профілю</a></div>
+                <div class="justify-content-center mt-3">
+                    <div th:unless="${error}" th:text="${message}"></div>
+                    <div th:if="${error}" th:text="${errorMessage}"></div>
+                </div>
+                <div class="justify-content-center mt-3"><a class="btn btn-success" href="/profile"><- Повернутись до профілю</a></div>
             </div>
         </div>
     </div>

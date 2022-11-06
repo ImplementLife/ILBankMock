@@ -2,6 +2,7 @@ package com.implementLife.BankMock.data;
 
 import com.implementLife.BankMock.entity.BankAccount;
 import com.implementLife.BankMock.entity.BankAccountAction;
+import com.implementLife.BankMock.entity.BankAccountCreateOrder;
 import com.implementLife.BankMock.entity.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,9 +24,10 @@ public class ClientServiceImpl implements ClientService {
         BankAccount bankAccountOtherClient = bankAccountRepo.find(code16xOtherClient);
         if (bankAccountOtherClient == null) throw new IllegalArgumentException("Такої картки не існує");
 
-        String[] split = sum.split("\\.");
+        String[] split = sum.split("[.,]");
         long sumBanknote = Long.parseLong(split[0]);
-        int sumPenny = Integer.parseInt(split[1]);
+        int sumPenny = 0;
+        if (split.length > 1) sumPenny = Integer.parseInt(split[1]);
 
         if (sumBanknote < 0) throw new IllegalArgumentException("Banknote < 0. it's bad");
         if (sumPenny >= 100) throw new IllegalArgumentException("Penny >= 100. it's bad");
@@ -96,5 +98,32 @@ public class ClientServiceImpl implements ClientService {
     public List<BankAccountAction> getHistory(UUID clientId, UUID bankAccountId) {
         Client byId = clientRepo.getById(clientId);
         return byId.getBankAccounts().stream().filter(e -> e.getId().equals(bankAccountId)).findFirst().orElseThrow().getBankAccountActions();
+    }
+
+    @Override
+    public boolean createOrder(Client client) {
+        bankAccountRepo.createOrder(client);
+        return true;
+    }
+
+    private boolean bankAccountCreateOrder(BankAccountCreateOrder order) {
+        Client client = clientRepo.getById(order.getClient().getId());
+
+        client.getBankAccounts().add(bankAccountRepo.createBankAccount());
+        return true;
+    }
+
+    @Override
+    public boolean processingCreateOrder(UUID idOrder, String action) {
+        BankAccountCreateOrder orderById = bankAccountRepo.getOrderById(idOrder);
+        if ("approve".equals(action)) {
+            orderById.setStatus(action);
+            bankAccountCreateOrder(orderById);
+        } else if ("dismiss".equals(action)) {
+            orderById.setStatus(action);
+        } else {
+            throw new IllegalArgumentException("Not exist action");
+        }
+        return true;
     }
 }

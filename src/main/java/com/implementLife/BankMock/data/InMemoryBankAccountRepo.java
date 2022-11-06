@@ -1,24 +1,26 @@
 package com.implementLife.BankMock.data;
 
 import com.implementLife.BankMock.entity.BankAccount;
+import com.implementLife.BankMock.entity.BankAccountCreateOrder;
+import com.implementLife.BankMock.entity.Client;
+import com.implementLife.BankMock.entity.Currency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryBankAccountRepo implements BankAccountRepo {
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryBankAccountRepo.class);
-    private Map<UUID, BankAccount> mapById;
-    private Map<String, BankAccount> mapByCode16x;
+    private final Map<UUID, BankAccount> bankAccountsById = new TreeMap<>();
+    private final Map<String, BankAccount> bankAccountsByCode16x = new TreeMap<>();
 
-    public InMemoryBankAccountRepo() {
-        mapById = new TreeMap<>();
-        mapByCode16x = new TreeMap<>();
-    }
+    private final Map<UUID, BankAccountCreateOrder> ordersById = new TreeMap<>();
+    private final Map<UUID, List<BankAccountCreateOrder>> ordersByClientId = new TreeMap<>();
 
     private UUID createPrimaryId() {
         UUID id = UUID.randomUUID();
-        if (mapById.containsKey(id)) {
+        if (bankAccountsById.containsKey(id)) {
             return createPrimaryId();
         } else {
             return id;
@@ -27,7 +29,7 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
 
     private String createPrimaryCode16x() {
         String code = String.format("%016d", (long) (Math.random() * 9999_9999_9999_9999L));
-        if (mapByCode16x.containsKey(code)) {
+        if (bankAccountsByCode16x.containsKey(code)) {
             return createPrimaryCode16x();
         } else {
             return code;
@@ -35,8 +37,8 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
     }
 
     private void save(BankAccount bankAccount) {
-        mapById.put(bankAccount.getId(), bankAccount);
-        mapByCode16x.put(bankAccount.getCode16x(), bankAccount);
+        bankAccountsById.put(bankAccount.getId(), bankAccount);
+        bankAccountsByCode16x.put(bankAccount.getCode16x(), bankAccount);
     }
 
     @Override
@@ -45,10 +47,9 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
         bankAccount.setId(createPrimaryId());
         bankAccount.setCode16x(createPrimaryCode16x());
         bankAccount.setCodeCvv(String.format("%03d", (int) (Math.random() * 999L)));
-        bankAccount.setSumBanknote(320);
-        bankAccount.setSumPenny(30);
         bankAccount.setName("Картка Універсальна");
         bankAccount.setDateCreate(new Date());
+        bankAccount.setCurrency(new Currency("$"));
         bankAccount.setBankAccountActions(new LinkedList<>());
         save(bankAccount);
         LOG.info("\t" + bankAccount.getCode16x());
@@ -57,11 +58,31 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
 
     @Override
     public BankAccount find(UUID id) {
-        return mapById.get(id);
+        return bankAccountsById.get(id);
     }
 
     @Override
     public BankAccount find(String code16x) {
-        return mapByCode16x.get(code16x);
+        return bankAccountsByCode16x.get(code16x);
+    }
+
+    @Override
+    public BankAccountCreateOrder getOrderById(UUID id) {
+        return ordersById.get(id);
+    }
+
+    @Override
+    public List<BankAccountCreateOrder> getAllOrdersOnReview() {
+        return ordersById.values().stream().filter(e -> "onReview".equals(e.getStatus())).collect(Collectors.toList());
+    }
+
+    @Override
+    public BankAccountCreateOrder createOrder(Client client) {
+        BankAccountCreateOrder order = new BankAccountCreateOrder();
+        order.setId(UUID.randomUUID());
+        order.setClient(client);
+        order.setStatus("onReview");
+        ordersById.put(order.getId(), order);
+        return order;
     }
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" class="h-100">
 <head>
    <th:block  th:insert="~{com/com :: head}"></th:block>
-   <title>IL Bank Mock - Login</title>
+   <title>IL Bank Mock - Вхід</title>
 </head>
 
 <body class="h-100 bg-dark">
@@ -11,13 +11,13 @@
       <div class="container-fluid d-flex h-100 justify-content-center align-items-center p-0">
          <div class="row bg-white shadow-sm">
             <div class="col border rounded p-4">
-               <h3 class="text-center mb-4">Login</h3>
+               <h3 class="text-center mb-4">Вхід</h3>
                <form action="/login" method="post" novalidate>
                   <div class="form-group">
-                     <input type="email" name="identification_key" placeholder="Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                     <input type="tel" name="identification_key" placeholder="Номер телефону" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                   </div>
                   <div class="mt-2 form-group">
-                     <input type="password" name="password" placeholder="Pass" class="form-control" id="exampleInputPassword1">
+                     <input type="password" name="password" placeholder="Пароль" class="form-control" id="exampleInputPassword1">
                   </div>
                   <button type="submit" class="mt-3 btn btn-primary w-100">Login</button>
                </form>
@@ -25,7 +25,7 @@
                   <a class="btn btn-outline-primary text-decoration-none w-100" href="/oauth2/authorization/google">With Google</a>
                </div>-->
                <div class="mt-2 ps-2 pe-2">
-                  Are you not have an account? <a class="text-decoration-none" href="/registration">register</a>
+                  Немає аккаунту? <a class="text-decoration-none" href="/registration">Реєстрація</a>
                </div>
             </div>
          </div>
