@@ -1,15 +1,18 @@
 package com.implementLife.BankMock.controller.dto;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 import java.util.UUID;
 
 public class CreateBillingRequest {
     @NotBlank(message = "Can't be blank")
-    public String units;
+    private String units;
     @NotBlank(message = "Can't be blank")
-    public String iban;
+    private UUID accessToken;
     @NotBlank(message = "Can't be blank")
-    public UUID accessToken;
+    private UUID appId;
+    private Date dateCreate;
+    private String paymentDescription;
 
     public CreateBillingRequest() {}
 
@@ -27,10 +30,24 @@ public class CreateBillingRequest {
         this.units = units;
     }
 
-    public String getIban() {
-        return iban;
+    public Date getDateCreate() {
+        return dateCreate;
     }
-    public void setIban(String iban) {
-        this.iban = iban;
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    public UUID getAppId() {
+        return appId;
+    }
+    public void setAppId(UUID appId) {
+        this.appId = appId;
+    }
+
+    public String getPaymentDescription() {
+        return paymentDescription;
+    }
+    public void setPaymentDescription(String paymentDescription) {
+        this.paymentDescription = paymentDescription;
     }
 }

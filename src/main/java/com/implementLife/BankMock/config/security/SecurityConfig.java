@@ -33,7 +33,7 @@ public class SecurityConfig {
         https
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(a -> a
-                .antMatchers("/api/**").hasRole("USER")
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/profile/**").hasAnyRole("USER", "ADMIN", "MANAGER")
                 .antMatchers("/manager/**").hasRole("MANAGER")
                 .antMatchers("/**").permitAll()

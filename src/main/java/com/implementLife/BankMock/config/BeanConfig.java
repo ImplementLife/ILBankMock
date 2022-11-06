@@ -19,4 +19,20 @@ public class BeanConfig {
     public ClientService getClientService() {
         return new ClientServiceImpl();
     }
+    @Bean
+    public BusinessAppRepo getBusinessAppRepo() {
+        return new InMemoryBusinessAppRepo();
+    }
+    @Bean
+    public ExternalApiService getExternalApiService() {
+        return new ExternalApiServiceImpl();
+    }
+    @Bean
+    public PaymentService getPaymentService() {
+        return new PaymentServiceImpl();
+    }
+    @Bean
+    public BillingRepo getBillingRepo() {
+        return new InMemoryBillingRepo();
+    }
 }

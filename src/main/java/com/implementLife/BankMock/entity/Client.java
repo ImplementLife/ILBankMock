@@ -1,13 +1,10 @@
 package com.implementLife.BankMock.entity;
 
-import com.implementLife.BankMock.controller.dto.ClientPersonalInfoRequest;
-import com.implementLife.BankMock.controller.dto.ClientResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Client implements ClientPersonalInfoRequest, ClientResponse {
+public class Client {
     private UUID id;
 
     private String firstName;

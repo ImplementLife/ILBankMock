@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,5 +23,13 @@ public class AdviceController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Map<String, Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, Object> errorMessage = new HashMap<>();
+        errorMessage.put("message", ex.getMessage());
+        errorMessage.put("timestamp", new Date().getTime());
+        return errorMessage;
     }
 }

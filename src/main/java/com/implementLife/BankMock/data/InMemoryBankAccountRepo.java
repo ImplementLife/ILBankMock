@@ -71,12 +71,15 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
     }
 
     @Override
-    public BankAccount find(UUID id) {
+    public BankAccount findId(UUID id) {
         return bankAccountsById.get(id);
     }
-
     @Override
-    public BankAccount find(String code16x) {
+    public BankAccount findByIban(String iban) {
+        return bankAccountsByIban.get(iban);
+    }
+
+    public BankAccount findByCode16x(String code16x) {
         return bankAccountsByCode16x.get(code16x);
     }
 

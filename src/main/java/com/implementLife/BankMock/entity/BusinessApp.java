@@ -5,7 +5,11 @@ import java.util.UUID;
 public class BusinessApp {
     private UUID id;
     private UUID accessApiToken;
+    private String ibanReceiver;
     private String name;
+    private String urlCompleteRedirect;
+    private String urlSendResult;
+    private boolean needSendResult;
     private Client client;
 
     public UUID getId() {
@@ -34,5 +38,33 @@ public class BusinessApp {
     }
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public String getUrlCompleteRedirect() {
+        return urlCompleteRedirect;
+    }
+    public void setUrlCompleteRedirect(String urlCompleteRedirect) {
+        this.urlCompleteRedirect = urlCompleteRedirect;
+    }
+
+    public String getUrlSendResult() {
+        return urlSendResult;
+    }
+    public void setUrlSendResult(String urlSendResult) {
+        this.urlSendResult = urlSendResult;
+    }
+
+    public boolean isNeedSendResult() {
+        return needSendResult;
+    }
+    public void setNeedSendResult(boolean needSendResult) {
+        this.needSendResult = needSendResult;
+    }
+
+    public String getIbanReceiver() {
+        return ibanReceiver;
+    }
+    public void setIbanReceiver(String ibanReceiver) {
+        this.ibanReceiver = ibanReceiver;
     }
 }

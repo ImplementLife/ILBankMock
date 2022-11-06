@@ -9,8 +9,12 @@ import java.util.UUID;
 
 public interface BankAccountRepo {
     BankAccount createBankAccount();
-    BankAccount find(UUID id);
-    BankAccount find(String code16x);
+
+    BankAccount findId(UUID id);
+
+    BankAccount findByIban(String iban);
+
+    BankAccount findByCode16x(String code16x);
 
     BankAccountCreateOrder getOrderById(UUID id);
 

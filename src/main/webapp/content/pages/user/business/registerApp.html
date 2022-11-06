@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block  th:insert="~{com/com :: head}"></th:block>
     <title>IL Bank Mock - Реєстрація додатку</title>
@@ -14,6 +14,24 @@
                 <form action="/profile/business/registerBusinessApp" method="post" novalidate>
                     <div class="form-group mt-2">
                         <input type="text" name="name" placeholder="Назва" class="form-control">
+                    </div>
+                    <div class="form-group mt-2">
+                        <label class="form-check-label" for="ibanReceiver">Реквізити для отримання оплат</label>
+                        <select class="form-select mt-2" name="ibanReceiver" id="ibanReceiver">
+                            <th:block th:each="ba : ${bankAccounts}">
+                                <option th:value="${ba.iban}">[[${ba.name}]] > [[${ba.iban}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <!--<div class="form-group mt-2">
+                        <input type="text" name="urlCompleteRedirect" placeholder="URL для перенаправлення" class="form-control">
+                    </div>-->
+                    <!--<div class="form-group mt-2">
+                        <input name="needSendResult" class="form-check-input" type="checkbox" value="" id="needSendResult">
+                        <label class="form-check-label" for="needSendResult">Надсилати результати?</label>
+                    </div>-->
+                    <div class="form-group mt-2">
+                        <input type="text" name="urlSendResult" placeholder="URL для надсилання результату" class="form-control">
                     </div>
                     <button type="submit" class="mt-3 btn btn-primary w-100">Підтвердити</button>
                 </form>

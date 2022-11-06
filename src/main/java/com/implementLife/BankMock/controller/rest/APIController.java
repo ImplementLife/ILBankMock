@@ -1,15 +1,12 @@
 package com.implementLife.BankMock.controller.rest;
 
-import com.implementLife.BankMock.controller.dto.ClientResponse;
+import com.implementLife.BankMock.controller.dto.BillingInfo;
 import com.implementLife.BankMock.controller.dto.CreateBillingRequest;
-import com.implementLife.BankMock.controller.dto.PayBillingRequest;
-import com.implementLife.BankMock.entity.Client;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,14 +25,6 @@ public interface APIController {
     })
     @PostMapping("createBilling")
     @ResponseStatus(HttpStatus.CREATED)
-    void createBilling(@Valid @RequestBody CreateBillingRequest request);
-
-
-    @Operation(responses = {
-        @ApiResponse(responseCode = "200"),
-        @ApiResponse(responseCode = "403")
-    })
-    @PostMapping("payBilling")
-    void payBilling(@Valid @RequestBody PayBillingRequest request);
+    BillingInfo createBilling(@RequestBody CreateBillingRequest request);
 
 }

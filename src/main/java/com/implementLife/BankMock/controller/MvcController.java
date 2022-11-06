@@ -5,7 +5,9 @@ import com.implementLife.BankMock.config.security.Role;
 import com.implementLife.BankMock.controller.dto.PayRequest;
 import com.implementLife.BankMock.data.BankAccountRepo;
 import com.implementLife.BankMock.data.ClientService;
+import com.implementLife.BankMock.data.PaymentService;
 import com.implementLife.BankMock.entity.BankAccountAction;
+import com.implementLife.BankMock.entity.BusinessApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,8 @@ public class MvcController {
     private ClientService clientService;
     @Autowired
     private BankAccountRepo bankAccountRepo;
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping("/")
     public String main() {
@@ -73,7 +77,7 @@ public class MvcController {
 
     @PostMapping("/profile/pay")
     public String pay(@ModelAttribute PayRequest payRequest, Model model) {
-        err(() -> clientService.pay(
+        err(() -> paymentService.payByCode16x(
             getSec().getClient().getId(),
             payRequest.getCode16xCurrentClient(),
             payRequest.getCode16xOtherClient(),
@@ -100,13 +104,14 @@ public class MvcController {
     }
 
     @GetMapping("/profile/business/registerBusinessApp")
-    public String registerBusinessApp() {
+    public String registerBusinessApp(Model model) {
+        model.addAttribute("bankAccounts", getSec().getClient().getBankAccounts());
         return "user/business/registerApp";
     }
 
     @PostMapping("/profile/business/registerBusinessApp")
-    public String registerBusinessApp(@RequestParam String name, Model model) {
-        err(() -> clientService.registerBusinessApp(getSec().getClient(), name), model, "Заявку оброблено");
+    public String registerBusinessApp(@ModelAttribute BusinessApp app, Model model) {
+        err(() -> clientService.registerBusinessApp(getSec().getClient(), app), model, "Заявку оброблено");
         return "user/result";
     }
 }
