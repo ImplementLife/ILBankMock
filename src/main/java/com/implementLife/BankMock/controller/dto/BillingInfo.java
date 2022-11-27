@@ -2,6 +2,7 @@ package com.implementLife.BankMock.controller.dto;
 
 public class BillingInfo {
     private String paymentPageUrl;
+    private long lastDateTimeForPay;
     private String status;
 
     public String getPaymentPageUrl() {
@@ -16,5 +17,12 @@ public class BillingInfo {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getLastDateTimeForPay() {
+        return lastDateTimeForPay;
+    }
+    public void setLastDateTimeForPay(long lastDateTimeForPay) {
+        this.lastDateTimeForPay = lastDateTimeForPay;
     }
 }

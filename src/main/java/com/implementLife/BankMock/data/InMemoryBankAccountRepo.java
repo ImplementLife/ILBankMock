@@ -51,7 +51,7 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
     private void save(BankAccount bankAccount) {
         bankAccountsById.put(bankAccount.getId(), bankAccount);
         bankAccountsByCode16x.put(bankAccount.getCode16x(), bankAccount);
-        bankAccountsByCode16x.put(bankAccount.getIban(), bankAccount);
+        bankAccountsByIban.put(bankAccount.getIban(), bankAccount);
     }
 
     @Override

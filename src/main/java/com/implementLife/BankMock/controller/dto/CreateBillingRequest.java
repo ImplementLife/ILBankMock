@@ -13,6 +13,7 @@ public class CreateBillingRequest {
     private UUID appId;
     private Date dateCreate;
     private String paymentDescription;
+    private String completePaymentLink;
 
     public CreateBillingRequest() {}
 
@@ -49,5 +50,12 @@ public class CreateBillingRequest {
     }
     public void setPaymentDescription(String paymentDescription) {
         this.paymentDescription = paymentDescription;
+    }
+
+    public String getCompletePaymentLink() {
+        return completePaymentLink;
+    }
+    public void setCompletePaymentLink(String completePaymentLink) {
+        this.completePaymentLink = completePaymentLink;
     }
 }

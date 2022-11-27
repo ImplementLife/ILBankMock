@@ -3,18 +3,29 @@ package com.implementLife.BankMock.controller;
 import com.implementLife.BankMock.config.security.ClientSec;
 import com.implementLife.BankMock.config.security.Role;
 import com.implementLife.BankMock.controller.dto.PayRequest;
-import com.implementLife.BankMock.data.BankAccountRepo;
-import com.implementLife.BankMock.data.ClientService;
-import com.implementLife.BankMock.data.PaymentService;
+import com.implementLife.BankMock.data.*;
 import com.implementLife.BankMock.entity.BankAccountAction;
+import com.implementLife.BankMock.entity.Billing;
 import com.implementLife.BankMock.entity.BusinessApp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +37,8 @@ public class MvcController {
     private BankAccountRepo bankAccountRepo;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private BillingRepo billingRepo;
 
     @GetMapping("/")
     public String main() {
@@ -44,6 +57,9 @@ public class MvcController {
             model.addAttribute("error", true);
             model.addAttribute("errorMessage", e.getMessage());
         }
+    }
+    private void err(Runnable action, Model model, Runnable reactionOnErr) {
+
     }
 
     @GetMapping("/profile")
@@ -73,6 +89,31 @@ public class MvcController {
         ClientSec clientSec = getSec();
         model.addAttribute("bankAccounts", clientSec.getClient().getBankAccounts());
         return "user/pay";
+    }
+
+    @GetMapping("/profile/payBilling")
+    public String payBilling(Model model, @RequestParam String billingId) {
+        ClientSec clientSec = getSec();
+        model.addAttribute("bankAccounts", clientSec.getClient().getBankAccounts());
+
+        Billing billingInfo = billingRepo.findById(UUID.fromString(billingId));
+        model.addAttribute("billingInfo", billingInfo);
+        return "user/payBilling";
+    }
+
+    @PostMapping("/profile/submitPayBilling")
+    public String submitPayBilling(Model model, @RequestParam UUID billingId, @RequestParam String code16xCurrentClient) {
+        ClientSec clientSec = getSec();
+        model.addAttribute("bankAccounts", clientSec.getClient().getBankAccounts());
+
+        try {
+            Billing billing = paymentService.payByBillingId(clientSec.getClient().getId(), billingId, code16xCurrentClient);
+            model.addAttribute("message", "Платіж успішно проведено");
+            model.addAttribute("completePaymentLink", billing.getCompletePaymentLink());
+        } catch (Exception ignored) {
+            model.addAttribute("message", "Платіж НЕ вдалося обробити");
+        }
+        return "user/payBillingResult";
     }
 
     @PostMapping("/profile/pay")

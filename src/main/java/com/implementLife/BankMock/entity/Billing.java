@@ -7,6 +7,7 @@ public class Billing {
     private UUID id;
     private String receiverName;
     private String paymentDescription;
+    private String completePaymentLink;
     private BankAccount bankAccountReceiver;
     private Date lastDateTimeForPay;
     private BillingStatus status;
@@ -59,5 +60,12 @@ public class Billing {
     }
     public void setPaymentDescription(String paymentDescription) {
         this.paymentDescription = paymentDescription;
+    }
+
+    public String getCompletePaymentLink() {
+        return completePaymentLink;
+    }
+    public void setCompletePaymentLink(String completePaymentLink) {
+        this.completePaymentLink = completePaymentLink;
     }
 }

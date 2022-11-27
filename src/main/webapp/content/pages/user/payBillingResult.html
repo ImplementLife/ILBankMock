@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block  th:insert="~{com/com :: head}"></th:block>
+    <title>IL Bank Mock - Результат оплати</title>
+</head>
+<body class="bg-dark">
+<th:block  th:insert="~{com/com :: header}"></th:block>
+<main class="text-light">
+    <div class="container">
+        <div class="justify-content-center">
+            <div>
+                <div class="mt-3 text-center fs-5">[[${message}]]</div>
+                <a class="btn btn-success mt-3 text-center fs-5" th:href="${completePaymentLink}">Повернутися</a>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block  th:insert="~{com/com :: footer}"></th:block>
+</body>
+</html>

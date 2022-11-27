@@ -1,8 +1,6 @@
 package com.implementLife.BankMock.data;
 
-import com.implementLife.BankMock.entity.BankAccount;
-import com.implementLife.BankMock.entity.BankAccountAction;
-import com.implementLife.BankMock.entity.Client;
+import com.implementLife.BankMock.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -11,6 +9,8 @@ import java.util.UUID;
 public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private ClientRepo clientRepo;
+    @Autowired
+    private BillingRepo billingRepo;
     @Autowired
     private BankAccountRepo bankAccountRepo;
 
@@ -101,7 +101,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public boolean payByBillingId(UUID billingId, String code16xCardSander) {
-        return true;
+    public Billing payByBillingId(UUID clientId, UUID billingId, String code16xCardSander) {
+        Billing byId = billingRepo.findById(billingId);
+        if (byId.getStatus() != BillingStatus.WAIT_PAY) {
+            throw new IllegalStateException("Вже оплачено");
+        }
+        payByIban(clientId, code16xCardSander, byId.getBankAccountReceiver().getIban(), byId.getSum());
+        byId.setStatus(BillingStatus.PAYED);
+        return byId;
     }
 }

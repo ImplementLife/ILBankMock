@@ -43,12 +43,14 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         billing.setSum(request.getUnits());
         billing.setReceiverName(app.getName());
         billing.setPaymentDescription(request.getPaymentDescription());
+        billing.setCompletePaymentLink(request.getCompletePaymentLink());
         billing.setBankAccountReceiver(bankAccountRepo.findByIban(app.getIbanReceiver()));
         billing.setStatus(BillingStatus.WAIT_PAY);
         billingRepo.save(billing);
 
         BillingInfo info = new BillingInfo();
         info.setPaymentPageUrl(paymentUrl + "?billingId=" + billing.getId());
+        info.setLastDateTimeForPay(billing.getLastDateTimeForPay().getTime());
         return info;
     }
 }
