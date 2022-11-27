@@ -1,7 +1,8 @@
 package com.implementLife.BankMock.config.security;
 
-import com.implementLife.BankMock.data.ClientRepo;
-import com.implementLife.BankMock.entity.Client;
+import com.implementLife.BankMock.data.entity.security.ClientSec;
+import com.implementLife.BankMock.services.interfaces.ClientRepo;
+import com.implementLife.BankMock.data.entity.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

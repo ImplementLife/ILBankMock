@@ -1,11 +1,8 @@
 package com.implementLife.BankMock.controller.rest;
 
-import com.implementLife.BankMock.controller.dto.BillingInfo;
-import com.implementLife.BankMock.controller.dto.CreateBillingRequest;
-import com.implementLife.BankMock.controller.dto.PayBillingRequest;
-import com.implementLife.BankMock.data.ClientRepo;
-import com.implementLife.BankMock.data.ClientService;
-import com.implementLife.BankMock.data.ExternalApiService;
+import com.implementLife.BankMock.data.dto.BillingInfo;
+import com.implementLife.BankMock.data.dto.CreateBillingRequest;
+import com.implementLife.BankMock.services.interfaces.ExternalApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

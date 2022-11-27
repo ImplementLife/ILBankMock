@@ -1,15 +1,13 @@
 package com.implementLife.BankMock.controller.rest;
 
-import com.implementLife.BankMock.controller.dto.BillingInfo;
-import com.implementLife.BankMock.controller.dto.CreateBillingRequest;
+import com.implementLife.BankMock.data.dto.BillingInfo;
+import com.implementLife.BankMock.data.dto.CreateBillingRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 //@SecurityRequirement(name = "Session cookie", scopes = {"JSESSIONID"})
 @ApiResponse(

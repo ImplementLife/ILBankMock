@@ -1,31 +1,22 @@
 package com.implementLife.BankMock.controller;
 
-import com.implementLife.BankMock.config.security.ClientSec;
-import com.implementLife.BankMock.config.security.Role;
-import com.implementLife.BankMock.controller.dto.PayRequest;
-import com.implementLife.BankMock.data.*;
-import com.implementLife.BankMock.entity.BankAccountAction;
-import com.implementLife.BankMock.entity.Billing;
-import com.implementLife.BankMock.entity.BusinessApp;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.implementLife.BankMock.data.entity.security.ClientSec;
+import com.implementLife.BankMock.data.entity.security.Role;
+import com.implementLife.BankMock.data.dto.PayRequest;
+import com.implementLife.BankMock.services.interfaces.BankAccountRepo;
+import com.implementLife.BankMock.services.interfaces.BillingRepo;
+import com.implementLife.BankMock.services.interfaces.ClientService;
+import com.implementLife.BankMock.services.interfaces.PaymentService;
+import com.implementLife.BankMock.data.entity.BankAccountAction;
+import com.implementLife.BankMock.data.entity.Billing;
+import com.implementLife.BankMock.data.entity.BusinessApp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

@@ -1,9 +1,13 @@
 package com.implementLife.BankMock.config;
 
-import com.implementLife.BankMock.data.*;
+import com.implementLife.BankMock.services.*;
+import com.implementLife.BankMock.services.inMemoryRepo.InMemoryBankAccountRepo;
+import com.implementLife.BankMock.services.inMemoryRepo.InMemoryBillingRepo;
+import com.implementLife.BankMock.services.inMemoryRepo.InMemoryBusinessAppRepo;
+import com.implementLife.BankMock.services.inMemoryRepo.InMemoryClientRepo;
+import com.implementLife.BankMock.services.interfaces.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.mail.javamail.JavaMailSender;
