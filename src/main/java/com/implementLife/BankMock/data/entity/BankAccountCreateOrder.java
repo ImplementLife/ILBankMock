@@ -1,13 +1,31 @@
 package com.implementLife.BankMock.data.entity;
 
+import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
 public class BankAccountCreateOrder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
     private String status;  // dismiss, accept, onReview
     private String comment; // comment for status
+
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private BankAccountTemplate template;
+
+    public BankAccountTemplate getTemplate() {
+        return template;
+    }
+    public void setTemplate(BankAccountTemplate template) {
+        this.template = template;
+    }
 
     public UUID getId() {
         return id;

@@ -17,4 +17,6 @@ public interface ClientService {
     void addBusinessRole(Client client);
 
     void registerBusinessApp(Client client, BusinessApp name);
+
+    void requestBusinessBankAccount(Client client);
 }

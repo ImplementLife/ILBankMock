@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface BusinessAppRepo {
     BusinessApp save(BusinessApp app);
 
-    BusinessApp find(UUID id);
+    BusinessApp findById(UUID id);
 }

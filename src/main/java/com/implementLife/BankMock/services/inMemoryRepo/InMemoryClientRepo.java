@@ -1,5 +1,6 @@
 package com.implementLife.BankMock.services.inMemoryRepo;
 
+import com.implementLife.BankMock.data.entity.BankAccountTemplate;
 import com.implementLife.BankMock.data.entity.security.Role;
 import com.implementLife.BankMock.services.interfaces.BankAccountRepo;
 import com.implementLife.BankMock.services.interfaces.ClientRepo;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,11 +28,11 @@ public class InMemoryClientRepo implements ClientRepo {
         LOG.info("Creating test users:");
         BankAccount bankAccount;
 
-        bankAccount = bankAccountRepo.createBankAccount();
+        bankAccount = bankAccountRepo.createBankAccount(new BankAccountTemplate("personal"));
         bankAccount.setSumBanknote(450);
         create("user", "user", Role.USER.getId()).getBankAccounts().add(bankAccount);
 
-        bankAccount = bankAccountRepo.createBankAccount();
+        bankAccount = bankAccountRepo.createBankAccount(new BankAccountTemplate("personal"));
         bankAccount.setSumBanknote(820);
         create("user2", "user", Role.USER.getId()).getBankAccounts().add(bankAccount);
 
@@ -39,6 +41,8 @@ public class InMemoryClientRepo implements ClientRepo {
     }
     private Client create(String phone, String pass, char id) {
         Client client = new Client();
+        client.setBankAccounts(new ArrayList<>());
+        client.setBusinessApps(new ArrayList<>());
         client.setFirstName(phone);
         client.setLastName(phone);
         client.setMiddleName(phone);
@@ -66,12 +70,12 @@ public class InMemoryClientRepo implements ClientRepo {
     }
 
     @Override
-    public Client getByPhone(String phone) {
+    public Client findByPhone(String phone) {
         return byPhone.get(phone);
     }
 
     @Override
-    public Client getById(UUID id) {
+    public Client findById(UUID id) {
         return byId.get(id);
     }
 }

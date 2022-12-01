@@ -28,7 +28,7 @@ public class ExternalApiServiceImpl implements ExternalApiService {
 
     @Override
     public BillingInfo createBilling(CreateBillingRequest request) {
-        BusinessApp app = appRepo.find(request.getAppId());
+        BusinessApp app = appRepo.findById(request.getAppId());
         if (app == null) {
             throw new IllegalArgumentException("appId doesn't valid");
         }
@@ -48,11 +48,13 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         billing.setCompletePaymentLink(request.getCompletePaymentLink());
         billing.setBankAccountReceiver(bankAccountRepo.findByIban(app.getIbanReceiver()));
         billing.setStatus(BillingStatus.WAIT_PAY);
+        billing.setBusinessApp(app);
         billingRepo.save(billing);
 
         BillingInfo info = new BillingInfo();
         info.setPaymentPageUrl(paymentUrl + "?billingId=" + billing.getId());
         info.setLastDateTimeForPay(billing.getLastDateTimeForPay().getTime());
+        info.setStatus(billing.getStatus().toString());
         return info;
     }
 }

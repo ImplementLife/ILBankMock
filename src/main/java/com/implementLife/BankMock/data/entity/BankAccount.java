@@ -1,15 +1,25 @@
 package com.implementLife.BankMock.data.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 public class BankAccount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
     private String code16x;
     private String codeCvv;
     private String iban;
 
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
     private Currency currency;
     private long sumBanknote;
     private int sumPenny;
@@ -17,7 +27,21 @@ public class BankAccount {
 
     private Date dateCreate;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccountAction> bankAccountActions;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
     public List<BankAccountAction> getBankAccountActions() {
         return bankAccountActions;

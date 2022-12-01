@@ -1,15 +1,21 @@
 package com.implementLife.BankMock.data.entity;
 
+import javax.persistence.*;
 import java.util.UUID;
 
+@Entity
 public class BusinessApp {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
     private UUID accessApiToken;
     private String ibanReceiver;
     private String name;
-    private String urlCompleteRedirect;
     private String urlSendResult;
     private boolean needSendResult;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
     public UUID getId() {
@@ -38,13 +44,6 @@ public class BusinessApp {
     }
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public String getUrlCompleteRedirect() {
-        return urlCompleteRedirect;
-    }
-    public void setUrlCompleteRedirect(String urlCompleteRedirect) {
-        this.urlCompleteRedirect = urlCompleteRedirect;
     }
 
     public String getUrlSendResult() {

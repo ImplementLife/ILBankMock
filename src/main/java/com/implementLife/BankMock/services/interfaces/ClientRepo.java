@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface ClientRepo {
     Client save(Client client);
-    Client getByPhone(String phone);
-    Client getById(UUID id);
+    Client findByPhone(String phone);
+    Client findById(UUID id);
 }
