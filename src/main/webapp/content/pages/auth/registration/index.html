@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>IL Bank Mock - Реєстрація</title>
+   <th:block th:insert="~{com/com :: head}"></th:block>
+   <link rel="stylesheet" href="res/auth/registration/css/styles.css">
+</head>
+<body class="bg-dark">
+   <th:block th:insert="~{com/com :: header}"></th:block>
+   <main class="container">
+      <div class="container-fluid d-flex h-100 justify-content-center align-items-center p-0 mt-5">
+         <div class="row bg-white shadow-sm">
+            <div class="col border rounded p-4">
+               <h3 class="text-center mb-4">Реєстрація</h3>
+
+               <form action="/reg" method="post">
+                  <div class="material-textfield blue mt-2">
+                     <label class="ms-1" data-content="Телефон">Телефон</label>
+                     <input type="tel" class="form-control" name="phoneNumber" required autofocus>
+                  </div>
+                  <div class="material-textfield blue mt-2">
+                     <label class="ms-1" data-content="email">EMAIL</label>
+                     <input type="text" class="form-control" name="email" required autofocus>
+                  </div>
+                  <div class="material-textfield blue mt-2">
+                     <label class="ms-1" data-content="Прізвище">Прізвище</label>
+                     <input type="text" class="form-control" name="lastName" autofocus>
+                  </div>
+                  <div class="material-textfield blue mt-2">
+                     <label class="ms-1" data-content="Имя">Ім'я</label>
+                     <input type="text" class="form-control" name="firstName" required autofocus>
+                  </div>
+                  <div class="material-textfield blue mt-2">
+                     <label class="ms-1" data-content="По батькові">По батькові</label>
+                     <input type="text" class="form-control" name="middleName" autofocus>
+                  </div>
+                  <div class="material-textfield red mt-2">
+                     <label class="ms-1" data-content="Пароль">Пароль</label>
+                     <input type="password" class="form-control" name="pass" required autofocus>
+                  </div>
+                  <div class="material-textfield red mt-2">
+                     <label class="ms-1" data-content="Повторіть пароль">Повторіть пароль</label>
+                     <input type="password" class="form-control" name="passwordConfirm" required autofocus>
+                  </div>
+                  <div style="display:none"><input type="text" name="referer" th:value="${referer}"></div>
+                  <div class="container mt-2 text-center"><button class="btn btn-primary cen" type="submit">Зареєструватися</button></div>
+               </form>
+
+               <div class="cen mt-2">
+                  <div class="alert alert-danger" th:if="${passwordError != '' && passwordError != null}" th:text="${passwordError}"></div>
+                  <div class="alert alert-danger" th:if="${emailError != '' && emailError != null}"       th:text="${emailError}"></div>
+                  <div class="alert alert-danger" th:if="${massageError != '' && massageError != null}"   th:text="${massageError}"></div>
+               </div>
+               <div class="mt-2 ps-2 pe-2">
+                  Вже зареєстровані? <a class="text-decoration-none" href="/login">Війти</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </main>
+   <th:block th:insert="~{com/com :: footer}"></th:block>
+</body>
+</html>
