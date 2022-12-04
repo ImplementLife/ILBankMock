@@ -45,8 +45,8 @@ public class PaymentServiceImpl implements PaymentService {
         return bao;
     }
 
-    private void notifyApp(BusinessApp app) {
-        LOG.info("try notifyApp");
+    private void notifyApp(BusinessApp app, Billing billing) {
+        LOG.debug("try notifyApp");
         CompletableFuture.runAsync(() -> {
             if (app != null && Strings.isNotBlank(app.getUrlSendResult())) {
                 try {
@@ -54,16 +54,17 @@ public class PaymentServiceImpl implements PaymentService {
                     NotifyMessage msg = new NotifyMessage();
                     msg.setId(app.getId().toString());
                     msg.setAccToken(app.getAccessApiToken().toString());
-                    msg.setRes("billing was payed");
+                    msg.setStatus(billing.getStatus().toString());
 
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
                     String msgAsJson = mapper.writeValueAsString(msg);
                     template.postForLocation(urlSendResult, new HttpEntity<>(msgAsJson, headers));
+                    LOG.debug("notifyApp done");
                 } catch (JsonProcessingException e) {
                     LOG.error("Error with DTO", e);
                 } catch (Exception e) {
-                    LOG.error("Error with thread sleep", e);
+                    LOG.error("Error with send data", e);
                 }
             }
         }, executor);
@@ -160,7 +161,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
         payByIban(clientId, code16xCardSander, billing.getBankAccountReceiver().getIban(), billing.getSum());
         billing.setStatus(BillingStatus.PAYED);
-        notifyApp(billing.getBusinessApp());
+        notifyApp(billing.getBusinessApp(), billing);
         billingRepo.save(billing);
         return billing;
     }

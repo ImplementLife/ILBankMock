@@ -3,7 +3,7 @@ package com.implementLife.BankMock.data.dto;
 public class NotifyMessage {
     private String id;
     private String accToken;
-    private String res;
+    private String status;
 
     public String getId() {
         return id;
@@ -19,11 +19,11 @@ public class NotifyMessage {
         this.accToken = accToken;
     }
 
-    public String getRes() {
-        return res;
+    public String getStatus() {
+        return status;
     }
-    public void setRes(String res) {
-        this.res = res;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NotifyMessage {
         return "{" +
             "id='" + id + '\'' +
             ", accToken='" + accToken + '\'' +
-            ", res='" + res + '\'' +
+            ", status='" + status + '\'' +
             '}';
     }
 }
