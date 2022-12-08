@@ -21,7 +21,7 @@ public class InMemoryBusinessAppRepo implements BusinessAppRepo {
         return app;
     }
     @Override
-    public BusinessApp find(UUID id) {
+    public BusinessApp findById(UUID id) {
         return businessAppsById.get(id);
     }
 }

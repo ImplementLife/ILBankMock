@@ -1,10 +1,17 @@
 package com.implementLife.BankMock.data.entity;
 
-import java.util.ArrayList;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 public class Client {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
     private String firstName;
@@ -16,13 +23,14 @@ public class Client {
     private String pass;
     private String roles;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<BankAccount> bankAccounts;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<BusinessApp> businessApps;
 
-    public Client() {
-        bankAccounts = new ArrayList<>();
-        businessApps = new ArrayList<>();
-    }
 
     public List<BusinessApp> getBusinessApps() {
         return businessApps;

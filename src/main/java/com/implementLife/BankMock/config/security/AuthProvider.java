@@ -24,7 +24,14 @@ public class AuthProvider implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        ClientSec clientSec = securityClientInfo.loadClient(name);
+
+        ClientSec clientSec;
+        try {
+            clientSec = securityClientInfo.loadClient(name);
+        } catch (Exception e) {
+            throw new BadCredentialsException("User not exist");
+        }
+
         if (!passwordEncoder.matches(password, clientSec.getPassword())) {
             throw new BadCredentialsException("Passwords doe's not matched");
         }

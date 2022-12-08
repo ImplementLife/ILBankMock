@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 //@SecurityRequirement(name = "Session cookie", scopes = {"JSESSIONID"})
 @ApiResponse(
     responseCode = "403",
@@ -25,4 +27,6 @@ public interface APIController {
     @ResponseStatus(HttpStatus.CREATED)
     BillingInfo createBilling(@RequestBody CreateBillingRequest request);
 
+    @GetMapping("getBillingInfo")
+    BillingInfo getBillingInfo(@RequestParam UUID billingId);
 }

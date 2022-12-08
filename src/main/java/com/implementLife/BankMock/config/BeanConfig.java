@@ -6,48 +6,88 @@ import com.implementLife.BankMock.services.inMemoryRepo.InMemoryBillingRepo;
 import com.implementLife.BankMock.services.inMemoryRepo.InMemoryBusinessAppRepo;
 import com.implementLife.BankMock.services.inMemoryRepo.InMemoryClientRepo;
 import com.implementLife.BankMock.services.interfaces.*;
+import com.implementLife.BankMock.services.jpa.mgr.DBBankAccountRepo;
+import com.implementLife.BankMock.services.jpa.mgr.DBBillingRepo;
+import com.implementLife.BankMock.services.jpa.mgr.DBBusinessAppRepo;
+import com.implementLife.BankMock.services.jpa.mgr.DBClientRepo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.awt.image.BufferedImage;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 @Configuration
+@EnableAsync
 public class BeanConfig {
+    @Value("${impl_life.inMemoryRepo}")
+    private boolean inMemoryRepo;
+
     @Bean
-    public ClientRepo getClientRepo() {
-        return new InMemoryClientRepo();
+    public ClientRepo clientRepo() {
+        if (inMemoryRepo) {
+            return new InMemoryClientRepo();
+        } else {
+            return new DBClientRepo();
+        }
     }
     @Bean
-    public BankAccountRepo getBankAccountRepo() {
-        return new InMemoryBankAccountRepo();
+    public BankAccountRepo bankAccountRepo() {
+        if (inMemoryRepo) {
+            return new InMemoryBankAccountRepo();
+        } else {
+            return new DBBankAccountRepo();
+        }
     }
     @Bean
-    public ClientService getClientService() {
+    public BusinessAppRepo businessAppRepo() {
+        if (inMemoryRepo) {
+            return new InMemoryBusinessAppRepo();
+        } else {
+            return new DBBusinessAppRepo();
+        }
+    }
+    @Bean
+    public BillingRepo billingRepo() {
+        if (inMemoryRepo) {
+            return new InMemoryBillingRepo();
+        } else {
+            return new DBBillingRepo();
+        }
+    }
+
+    @Bean
+    public ClientService clientService() {
         return new ClientServiceImpl();
     }
     @Bean
-    public BusinessAppRepo getBusinessAppRepo() {
-        return new InMemoryBusinessAppRepo();
-    }
-    @Bean
-    public ExternalApiService getExternalApiService() {
+    public ExternalApiService externalApiService() {
         return new ExternalApiServiceImpl();
     }
     @Bean
-    public PaymentService getPaymentService() {
+    public PaymentService paymentService() {
         return new PaymentServiceImpl();
     }
+
     @Bean
-    public BillingRepo getBillingRepo() {
-        return new InMemoryBillingRepo();
+    public Executor asyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("async-");
+        executor.initialize();
+        return executor;
     }
     @Bean
-    public ImageCodeGenerator getImageCodeGenerator() {
+    public ImageCodeGenerator imageCodeGenerator() {
         return new ImageCodeGeneratorImpl();
     }
     @Bean
@@ -55,12 +95,11 @@ public class BeanConfig {
         return new BufferedImageHttpMessageConverter();
     }
     @Bean
-    public MailService getMailService() {
+    public MailService mailService() {
         return new MailServiceImpl();
     }
-
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("ilfa.dp.ua");
         mailSender.setPort(25);
@@ -76,6 +115,5 @@ public class BeanConfig {
 
         return mailSender;
     }
-
 
 }

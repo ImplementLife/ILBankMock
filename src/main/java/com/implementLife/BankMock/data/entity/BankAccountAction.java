@@ -1,10 +1,15 @@
 package com.implementLife.BankMock.data.entity;
 
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+@Entity
 public class BankAccountAction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
     private String sumBefore;
     private String sum;

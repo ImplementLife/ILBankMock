@@ -6,6 +6,8 @@ import com.implementLife.BankMock.services.interfaces.ExternalApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 public class BankMockRest implements APIController {
     @Autowired
@@ -14,5 +16,10 @@ public class BankMockRest implements APIController {
     @Override
     public BillingInfo createBilling(CreateBillingRequest request) {
         return apiService.createBilling(request);
+    }
+
+    @Override
+    public BillingInfo getBillingInfo(UUID billingId) {
+        throw new UnsupportedOperationException();
     }
 }

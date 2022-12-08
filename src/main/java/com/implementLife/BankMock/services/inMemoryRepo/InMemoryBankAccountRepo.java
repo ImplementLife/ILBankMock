@@ -1,10 +1,8 @@
 package com.implementLife.BankMock.services.inMemoryRepo;
 
-import com.implementLife.BankMock.services.interfaces.BankAccountRepo;
-import com.implementLife.BankMock.data.entity.BankAccount;
-import com.implementLife.BankMock.data.entity.BankAccountCreateOrder;
-import com.implementLife.BankMock.data.entity.Client;
+import com.implementLife.BankMock.data.entity.*;
 import com.implementLife.BankMock.data.entity.Currency;
+import com.implementLife.BankMock.services.interfaces.BankAccountRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,14 +47,16 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
         }
     }
 
-    private void save(BankAccount bankAccount) {
+    @Override
+    public boolean save(BankAccount bankAccount) {
         bankAccountsById.put(bankAccount.getId(), bankAccount);
         bankAccountsByCode16x.put(bankAccount.getCode16x(), bankAccount);
         bankAccountsByIban.put(bankAccount.getIban(), bankAccount);
+        return true;
     }
 
     @Override
-    public BankAccount createBankAccount() {
+    public BankAccount createBankAccount(BankAccountTemplate template) {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setId(createPrimaryId());
         bankAccount.setCode16x(createPrimaryCode16x());
@@ -72,7 +72,7 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
     }
 
     @Override
-    public BankAccount findId(UUID id) {
+    public BankAccount findById(UUID id) {
         return bankAccountsById.get(id);
     }
     @Override
@@ -85,12 +85,12 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
     }
 
     @Override
-    public BankAccountCreateOrder getOrderById(UUID id) {
+    public BankAccountCreateOrder findOrderById(UUID id) {
         return ordersById.get(id);
     }
 
     @Override
-    public List<BankAccountCreateOrder> getAllOrdersOnReview() {
+    public List<BankAccountCreateOrder> findAllOrdersOnReview() {
         return ordersById.values().stream().filter(e -> "onReview".equals(e.getStatus())).collect(Collectors.toList());
     }
 
@@ -100,7 +100,12 @@ public class InMemoryBankAccountRepo implements BankAccountRepo {
         order.setId(UUID.randomUUID());
         order.setClient(client);
         order.setStatus("onReview");
-        ordersById.put(order.getId(), order);
+        saveOrder(order);
         return order;
+    }
+
+    @Override
+    public void saveOrder(BankAccountCreateOrder order) {
+        ordersById.put(order.getId(), order);
     }
 }

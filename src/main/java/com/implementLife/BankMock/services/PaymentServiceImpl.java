@@ -1,26 +1,43 @@
 package com.implementLife.BankMock.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.implementLife.BankMock.data.dto.NotifyMessage;
 import com.implementLife.BankMock.data.entity.*;
 import com.implementLife.BankMock.services.interfaces.BankAccountRepo;
 import com.implementLife.BankMock.services.interfaces.BillingRepo;
 import com.implementLife.BankMock.services.interfaces.ClientRepo;
 import com.implementLife.BankMock.services.interfaces.PaymentService;
+import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class PaymentServiceImpl implements PaymentService {
+    private static final Logger LOG = LoggerFactory.getLogger(PaymentServiceImpl.class);
     @Autowired
     private ClientRepo clientRepo;
     @Autowired
     private BillingRepo billingRepo;
     @Autowired
     private BankAccountRepo bankAccountRepo;
+    @Autowired
+    private ObjectMapper mapper;
+    @Autowired
+    private Executor executor;
+    private final RestTemplate template = new RestTemplate();
 
     private BankAccountAction newAct(String description, String sumBefore, String sum) {
         BankAccountAction bao = new BankAccountAction();
-        bao.setId(UUID.randomUUID());
         bao.setDate(new Date());
         bao.setDescription(description);
         bao.setSumBefore(sumBefore);
@@ -28,9 +45,34 @@ public class PaymentServiceImpl implements PaymentService {
         return bao;
     }
 
+    private void notifyApp(BusinessApp app, Billing billing) {
+        LOG.debug("try notifyApp");
+        CompletableFuture.runAsync(() -> {
+            if (app != null && Strings.isNotBlank(app.getUrlSendResult())) {
+                try {
+                    String urlSendResult = app.getUrlSendResult();
+                    NotifyMessage msg = new NotifyMessage();
+                    msg.setId(app.getId().toString());
+                    msg.setAccToken(app.getAccessApiToken().toString());
+                    msg.setStatus(billing.getStatus().toString());
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_JSON);
+                    String msgAsJson = mapper.writeValueAsString(msg);
+                    template.postForLocation(urlSendResult, new HttpEntity<>(msgAsJson, headers));
+                    LOG.debug("notifyApp done");
+                } catch (JsonProcessingException e) {
+                    LOG.error("Error with DTO", e);
+                } catch (Exception e) {
+                    LOG.error("Error with send data", e);
+                }
+            }
+        }, executor);
+    }
+
     @Override
     public boolean payByCode16x(UUID clientId, String code16xCardSander, String code16xCardReceiver, String sum) {
-        Client currentClient = clientRepo.getById(clientId);
+        Client currentClient = clientRepo.findById(clientId);
         BankAccount bankAccountCurrentClient = currentClient.getBankAccounts()
             .stream().filter(e -> e.getCode16x().equals(code16xCardSander)).findFirst().orElseThrow();
         BankAccount bankAccountOtherClient = bankAccountRepo.findByCode16x(code16xCardReceiver);
@@ -89,6 +131,13 @@ public class PaymentServiceImpl implements PaymentService {
                 bankAccountOtherClient.getBankAccountActions().add(bankAccountActionForOtherClient);
                 bankAccountCurrentClient.getBankAccountActions().add(bankAccountActionForCurrentClient);
 
+                try {
+                    bankAccountRepo.save(bankAccountOtherClient);
+                    bankAccountRepo.save(bankAccountCurrentClient);
+                } catch (Exception es) {
+                    throw new IllegalStateException("Exception with save", es);
+                }
+
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
@@ -106,12 +155,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Billing payByBillingId(UUID clientId, UUID billingId, String code16xCardSander) {
-        Billing byId = billingRepo.findById(billingId);
-        if (byId.getStatus() != BillingStatus.WAIT_PAY) {
+        Billing billing = billingRepo.findById(billingId);
+        if (billing.getStatus() != BillingStatus.WAIT_PAY) {
             throw new IllegalStateException("Вже оплачено");
         }
-        payByIban(clientId, code16xCardSander, byId.getBankAccountReceiver().getIban(), byId.getSum());
-        byId.setStatus(BillingStatus.PAYED);
-        return byId;
+        payByIban(clientId, code16xCardSander, billing.getBankAccountReceiver().getIban(), billing.getSum());
+        billing.setStatus(BillingStatus.PAYED);
+        notifyApp(billing.getBusinessApp(), billing);
+        billingRepo.save(billing);
+        return billing;
     }
 }

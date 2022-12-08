@@ -19,7 +19,7 @@ public class SecurityClientInfo implements UserDetailsService {
     private ClientRepo clientRepo;
 
     public ClientSec loadClient(String username) {
-        Client client = clientRepo.getByPhone(username);
+        Client client = clientRepo.findByPhone(username);
         if (client == null) throw new UsernameNotFoundException("Client with name '$s' doe's not exist");
         return new ClientSec(client);
     }
