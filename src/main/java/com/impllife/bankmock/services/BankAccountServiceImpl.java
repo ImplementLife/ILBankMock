@@ -1,25 +1,30 @@
-package com.impllife.bankmock.services.jpa.mgr;
+package com.impllife.bankmock.services;
 
-import com.impllife.bankmock.data.entity.*;
-import com.impllife.bankmock.services.interfaces.BankAccountRepo;
-import com.impllife.bankmock.services.jpa.repo.BankAccountCreateOrderRepository;
-import com.impllife.bankmock.services.jpa.repo.BankAccountRepository;
+import com.impllife.bankmock.data.entity.BankAccount;
+import com.impllife.bankmock.data.entity.BankAccountCreateOrder;
+import com.impllife.bankmock.data.entity.BankAccountTemplate;
+import com.impllife.bankmock.data.entity.Client;
+import com.impllife.bankmock.data.repo.BankAccountCreateOrderRepo;
+import com.impllife.bankmock.data.repo.BankAccountRepo;
+import com.impllife.bankmock.services.interfaces.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class DBBankAccountRepo implements BankAccountRepo {
+@Service
+public class BankAccountServiceImpl implements BankAccountService {
     @Autowired
-    private BankAccountRepository bankAccountRepository;
+    private BankAccountRepo bankAccountRepo;
     @Autowired
-    private BankAccountCreateOrderRepository bankAccountCreateOrderRepository;
+    private BankAccountCreateOrderRepo bankAccountCreateOrderRepo;
 
     private String createPrimaryCode16x() {
         String code = String.format("%016d", (long) (Math.random() * 9999_9999_9999_9999L));
-        if (bankAccountRepository.existByCode16x(code)) {
+        if (bankAccountRepo.existByCode16x(code)) {
             return createPrimaryCode16x();
         } else {
             return code;
@@ -30,7 +35,7 @@ public class DBBankAccountRepo implements BankAccountRepo {
         String code = "UA" +
             String.format("%016d", (long) (Math.random() * 9999_9999_9999_9999L)) +
             String.format("%016d", (long) (Math.random() * 9999_9999_999L));
-        if (bankAccountRepository.existByIban(code)) {
+        if (bankAccountRepo.existByIban(code)) {
             return createPrimaryIban();
         } else {
             return code;
@@ -39,7 +44,7 @@ public class DBBankAccountRepo implements BankAccountRepo {
 
     @Override
     public boolean save(BankAccount bankAccount) {
-        bankAccountRepository.save(bankAccount);
+        bankAccountRepo.save(bankAccount);
         return true;
     }
 
@@ -47,42 +52,42 @@ public class DBBankAccountRepo implements BankAccountRepo {
     public BankAccount createBankAccount(BankAccountTemplate template) {
         BankAccount bankAccount = new BankAccount();
         //if ("personal".equals(template.getName())) {
-            bankAccount.setCode16x(createPrimaryCode16x());
-            bankAccount.setCodeCvv(String.format("%03d", (int) (Math.random() * 999L)));
-            bankAccount.setName("Картка Універсальна");
+        bankAccount.setCode16x(createPrimaryCode16x());
+        bankAccount.setCodeCvv(String.format("%03d", (int) (Math.random() * 999L)));
+        bankAccount.setName("Картка Універсальна");
         //} else if ("business".equals(template.getName())) {
-            bankAccount.setIban(createPrimaryIban());
+        bankAccount.setIban(createPrimaryIban());
         //}
         bankAccount.setDateCreate(new Date());
         bankAccount.setCurrency(template.getCurrency());
         bankAccount.setBankAccountActions(new LinkedList<>());
 
-        return bankAccountRepository.save(bankAccount);
+        return bankAccountRepo.save(bankAccount);
     }
 
     @Override
     public BankAccount findById(UUID id) {
-        return bankAccountRepository.findById(id).orElseThrow();
+        return bankAccountRepo.findById(id).orElseThrow();
     }
 
     @Override
     public BankAccount findByIban(String iban) {
-        return bankAccountRepository.findByIban(iban).orElseThrow();
+        return bankAccountRepo.findByIban(iban).orElseThrow();
     }
 
     @Override
     public BankAccount findByCode16x(String code16x) {
-        return bankAccountRepository.findByCode16x(code16x).orElseThrow();
+        return bankAccountRepo.findByCode16x(code16x).orElseThrow();
     }
 
     @Override
     public BankAccountCreateOrder findOrderById(UUID id) {
-        return bankAccountCreateOrderRepository.findById(id).orElseThrow();
+        return bankAccountCreateOrderRepo.findById(id).orElseThrow();
     }
 
     @Override
     public List<BankAccountCreateOrder> findAllOrdersOnReview() {
-        return bankAccountCreateOrderRepository.findAllOnReview();
+        return bankAccountCreateOrderRepo.findAllOnReview();
     }
 
     @Override
@@ -90,12 +95,12 @@ public class DBBankAccountRepo implements BankAccountRepo {
         BankAccountCreateOrder order = new BankAccountCreateOrder();
         order.setClient(client);
         order.setStatus("onReview");
-        bankAccountCreateOrderRepository.saveAndFlush(order);
+        bankAccountCreateOrderRepo.saveAndFlush(order);
         return order;
     }
 
     @Override
     public void saveOrder(BankAccountCreateOrder order) {
-        bankAccountCreateOrderRepository.saveAndFlush(order);
+        bankAccountCreateOrderRepo.saveAndFlush(order);
     }
 }

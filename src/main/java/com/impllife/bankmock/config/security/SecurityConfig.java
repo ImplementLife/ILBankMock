@@ -1,7 +1,5 @@
 package com.impllife.bankmock.config.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +9,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    private static final Logger LOG = LoggerFactory.getLogger(SecurityConfig.class);
-
     @Bean
     public PasswordEncoder bCryptPasswordEncoder() {
         return new PasswordEncoder() {
@@ -47,12 +43,17 @@ public class SecurityConfig {
                 .passwordParameter("password")
                 .permitAll()
             )
+
             .logout(l -> l
                 .logoutSuccessUrl("/login").permitAll()
             )
             .exceptionHandling(e -> e
                 .accessDeniedPage("/access-denied")
             );
+
+        https.csrf().disable();
+        https.headers().frameOptions().disable();
+
         return https.build();
     }
 

@@ -1,4 +1,4 @@
-package com.impllife.bankmock.services.jpa.repo;
+package com.impllife.bankmock.data.repo;
 
 import com.impllife.bankmock.data.entity.BankAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface BankAccountRepository extends JpaRepository<BankAccount, UUID> {
+public interface BankAccountRepo extends JpaRepository<BankAccount, UUID> {
     Optional<BankAccount> findByIban(String iban);
 
     Optional<BankAccount> findByCode16x(String code16x);

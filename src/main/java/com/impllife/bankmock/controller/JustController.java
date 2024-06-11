@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.impllife.bankmock.data.dto.NotifyMessage;
 import com.impllife.bankmock.services.interfaces.ImageCodeGenerator;
 import com.impllife.bankmock.services.interfaces.MailService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
@@ -22,13 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+@Slf4j
 @Controller
 public class JustController {
-    private static final Logger LOG = LoggerFactory.getLogger(JustController.class);
     @ResponseBody
     @GetMapping("/console")
     public String hi(HttpServletRequest request) {
-        LOG.info("\t/console is called from " + request.getRemoteAddr());
+        log.info("\t/console is called from " + request.getRemoteAddr());
 
         return "Hello " + request.getRemoteAddr() + " ))";
     }
@@ -39,7 +38,7 @@ public class JustController {
     @ResponseBody
     @PostMapping("/test")
     public String test(@RequestBody NotifyMessage msg, HttpServletRequest request) {
-        LOG.warn("test -> " + msg.toString());
+        log.warn("test -> " + msg.toString());
         return "ok";
     }
     @ResponseBody
@@ -60,7 +59,7 @@ public class JustController {
             String msgAsJson = mapper.writeValueAsString(msg);
             template.postForLocation(urlSendResult, new HttpEntity<>(msgAsJson, headers));
         } catch (JsonProcessingException e) {
-            LOG.error("", e);
+            log.error("", e);
         }
         return "ok";
     }

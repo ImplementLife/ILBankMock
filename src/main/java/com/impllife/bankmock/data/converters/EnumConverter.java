@@ -1,4 +1,4 @@
-package com.impllife.bankmock.services.jpa.converters;
+package com.impllife.bankmock.data.converters;
 
 import javax.persistence.AttributeConverter;
 

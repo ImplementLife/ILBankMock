@@ -1,32 +1,38 @@
 package com.impllife.bankmock.controller;
 
-import com.impllife.bankmock.data.entity.Client;
-import com.impllife.bankmock.data.entity.security.ClientSec;
-import com.impllife.bankmock.data.entity.security.Role;
 import com.impllife.bankmock.data.dto.PayRequest;
-import com.impllife.bankmock.services.interfaces.*;
 import com.impllife.bankmock.data.entity.BankAccountAction;
 import com.impllife.bankmock.data.entity.Billing;
 import com.impllife.bankmock.data.entity.BusinessApp;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.impllife.bankmock.data.entity.Client;
+import com.impllife.bankmock.data.entity.security.ClientSec;
+import com.impllife.bankmock.data.entity.security.Role;
+import com.impllife.bankmock.data.repo.BillingRepo;
+import com.impllife.bankmock.data.repo.ClientRepo;
+import com.impllife.bankmock.services.interfaces.BankAccountService;
+import com.impllife.bankmock.services.interfaces.ClientService;
+import com.impllife.bankmock.services.interfaces.PaymentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Controller
 public class MvcController {
-    private static final Logger LOG = LoggerFactory.getLogger(MvcController.class);
     @Autowired
     private ClientService clientService;
     @Autowired
-    private BankAccountRepo bankAccountRepo;
+    private BankAccountService bankAccountService;
     @Autowired
     private PaymentService paymentService;
     @Autowired
@@ -44,7 +50,7 @@ public class MvcController {
         return (ClientSec) authentication.getPrincipal();
     }
     private Client getClient() {
-        return clientRepo.findById(getSec().getClient().getId());
+        return clientRepo.findById(getSec().getClient().getId()).get();
     }
     private void err(Runnable run, Model model, String message) {
         try {
@@ -67,7 +73,7 @@ public class MvcController {
 
         model.addAttribute("client", getClient());
         if (clientSec.getAuthorities().contains(Role.MANAGER)) {
-            model.addAttribute("ordersOnReview", bankAccountRepo.findAllOrdersOnReview());
+            model.addAttribute("ordersOnReview", bankAccountService.findAllOrdersOnReview());
         }
         return "user/profile";
     }
@@ -91,7 +97,7 @@ public class MvcController {
     public String payBilling(Model model, @RequestParam String billingId) {
         model.addAttribute("bankAccounts", getClient().getBankAccounts());
 
-        Billing billingInfo = billingRepo.findById(UUID.fromString(billingId));
+        Billing billingInfo = billingRepo.findById(UUID.fromString(billingId)).get();
         model.addAttribute("billingInfo", billingInfo);
         return "user/payBilling";
     }
@@ -106,7 +112,7 @@ public class MvcController {
             model.addAttribute("message", "Платіж успішно проведено");
             model.addAttribute("completePaymentLink", billing.getCompletePaymentLink());
         } catch (Exception e) {
-            LOG.warn("Not complete billing payment", e);
+            log.warn("Not complete billing payment", e);
             model.addAttribute("message", "Платіж НЕ вдалося обробити");
         }
         return "user/payBillingResult";

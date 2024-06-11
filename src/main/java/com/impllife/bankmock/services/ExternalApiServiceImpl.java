@@ -2,25 +2,27 @@ package com.impllife.bankmock.services;
 
 import com.impllife.bankmock.data.dto.BillingInfo;
 import com.impllife.bankmock.data.dto.CreateBillingRequest;
-import com.impllife.bankmock.services.interfaces.BankAccountRepo;
-import com.impllife.bankmock.services.interfaces.BillingRepo;
-import com.impllife.bankmock.services.interfaces.BusinessAppRepo;
-import com.impllife.bankmock.services.interfaces.ExternalApiService;
 import com.impllife.bankmock.data.entity.Billing;
 import com.impllife.bankmock.data.entity.BillingStatus;
 import com.impllife.bankmock.data.entity.BusinessApp;
+import com.impllife.bankmock.data.repo.BillingRepo;
+import com.impllife.bankmock.data.repo.BusinessAppRepo;
+import com.impllife.bankmock.services.interfaces.BankAccountService;
+import com.impllife.bankmock.services.interfaces.ExternalApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
+@Service
 public class ExternalApiServiceImpl implements ExternalApiService {
     @Autowired
     private BusinessAppRepo appRepo;
     @Autowired
     private BillingRepo billingRepo;
     @Autowired
-    private BankAccountRepo bankAccountRepo;
+    private BankAccountService bankAccountService;
     @Value("${impl_life.paymentUrl}")
     private String paymentUrl;
     @Value("${impl_life.lifeTimeBillingInMinutes}")
@@ -28,7 +30,7 @@ public class ExternalApiServiceImpl implements ExternalApiService {
 
     @Override
     public BillingInfo createBilling(CreateBillingRequest request) {
-        BusinessApp app = appRepo.findById(request.getAppId());
+        BusinessApp app = appRepo.findById(request.getAppId()).get();
         if (app == null) {
             throw new IllegalArgumentException("appId doesn't valid");
         }
@@ -46,7 +48,7 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         billing.setReceiverName(app.getName());
         billing.setPaymentDescription(request.getPaymentDescription());
         billing.setCompletePaymentLink(request.getCompletePaymentLink());
-        billing.setBankAccountReceiver(bankAccountRepo.findByIban(app.getIbanReceiver()));
+        billing.setBankAccountReceiver(bankAccountService.findByIban(app.getIbanReceiver()));
         billing.setStatus(BillingStatus.WAIT_PAY);
         billing.setBusinessApp(app);
         billingRepo.save(billing);

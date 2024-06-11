@@ -8,7 +8,7 @@ import com.impllife.bankmock.data.entity.Client;
 import java.util.List;
 import java.util.UUID;
 
-public interface BankAccountRepo {
+public interface BankAccountService {
     BankAccount createBankAccount(BankAccountTemplate template);
 
     BankAccount findById(UUID id);
