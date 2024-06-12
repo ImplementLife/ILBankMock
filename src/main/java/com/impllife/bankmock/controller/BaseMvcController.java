@@ -3,13 +3,16 @@ package com.impllife.bankmock.controller;
 import com.impllife.bankmock.data.entity.Client;
 import com.impllife.bankmock.data.entity.security.ClientSec;
 import com.impllife.bankmock.data.repo.ClientRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
+import java.util.Objects;
 import java.util.UUID;
 
+@Slf4j
 public abstract class BaseMvcController {
 
     @Autowired
@@ -20,8 +23,8 @@ public abstract class BaseMvcController {
         return (ClientSec) authentication.getPrincipal();
     }
     public Client getClient() {
-//        log.info("id1 {}, id2 {}", clientRepo.findAll().get(0).getId(), getSec().getClient().getId());
-//        log.info("id1 e id2 {}", Objects.equals(clientRepo.findAll().get(0).getId(), getSec().getClient().getId()));
+        log.info("id1 {}, id2 {}", clientRepo.findAll().get(0).getId(), getSec().getClient().getId());
+        log.info("id1 e id2 {}", Objects.equals(clientRepo.findAll().get(0).getId(), getSec().getClient().getId()));
         UUID id = getSec().getClient().getId();
         return clientRepo.findById(id).get();
     }

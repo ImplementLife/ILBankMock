@@ -1,10 +1,19 @@
 package com.impllife.bankmock.data.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Billing {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,71 +32,4 @@ public class Billing {
     @ManyToOne
     @JoinColumn(name = "business_app_id")
     private BusinessApp businessApp;
-
-    //region Get/Set
-
-    public BusinessApp getBusinessApp() {
-        return businessApp;
-    }
-    public void setBusinessApp(BusinessApp businessApp) {
-        this.businessApp = businessApp;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public BankAccount getBankAccountReceiver() {
-        return bankAccountReceiver;
-    }
-    public void setBankAccountReceiver(BankAccount bankAccountReceiver) {
-        this.bankAccountReceiver = bankAccountReceiver;
-    }
-
-    public Date getLastDateTimeForPay() {
-        return lastDateTimeForPay;
-    }
-    public void setLastDateTimeForPay(Date lastDateTimeForPay) {
-        this.lastDateTimeForPay = lastDateTimeForPay;
-    }
-
-    public BillingStatus getStatus() {
-        return status;
-    }
-    public void setStatus(BillingStatus status) {
-        this.status = status;
-    }
-
-    public String getSum() {
-        return sum;
-    }
-    public void setSum(String sum) {
-        this.sum = sum;
-    }
-
-    public String getReceiverName() {
-        return receiverName;
-    }
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
-
-    public String getPaymentDescription() {
-        return paymentDescription;
-    }
-    public void setPaymentDescription(String paymentDescription) {
-        this.paymentDescription = paymentDescription;
-    }
-
-    public String getCompletePaymentLink() {
-        return completePaymentLink;
-    }
-    public void setCompletePaymentLink(String completePaymentLink) {
-        this.completePaymentLink = completePaymentLink;
-    }
-
-    //endregion
 }

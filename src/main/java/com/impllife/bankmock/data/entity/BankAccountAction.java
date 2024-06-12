@@ -1,11 +1,20 @@
 package com.impllife.bankmock.data.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankAccountAction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,43 +24,4 @@ public class BankAccountAction {
     private String sum;
     private String description;
     private Date date;
-
-    public UUID getId() {
-        return id;
-    }
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getSumBefore() {
-        return sumBefore;
-    }
-    public void setSumBefore(String sumBefore) {
-        this.sumBefore = sumBefore;
-    }
-
-    public String getSum() {
-        return sum;
-    }
-    public void setSum(String sum) {
-        this.sum = sum;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getFormatsDate() {
-        return new SimpleDateFormat().format(getDate());
-    }
 }

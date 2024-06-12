@@ -23,7 +23,7 @@ import java.io.IOException;
 
 @Slf4j
 @Controller
-public class JustController {
+public class TestController {
     @ResponseBody
     @GetMapping("/console")
     public String hi(HttpServletRequest request) {
@@ -41,6 +41,7 @@ public class JustController {
         log.warn("test -> " + msg.toString());
         return "ok";
     }
+
     @ResponseBody
     @GetMapping("/test2")
     public String test2() {

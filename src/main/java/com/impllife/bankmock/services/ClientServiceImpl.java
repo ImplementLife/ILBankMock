@@ -89,7 +89,7 @@ public class ClientServiceImpl implements ClientService {
 
         BankAccountTemplate template = new BankAccountTemplate();
         template.setName("business");
-        template.setCurrency(currencyRepo.findById(1L).orElseThrow());
+        template.setCurrency(currencyRepo.findById(1L).orElseThrow(() -> new IllegalStateException("Currency is not defined")));
 
         BankAccount bankAccount = bankAccountService.createBankAccount(template);
 

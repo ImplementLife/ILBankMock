@@ -1,9 +1,18 @@
 package com.impllife.bankmock.data.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankAccountCreateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,38 +29,4 @@ public class BankAccountCreateOrder {
     @JoinColumn(name = "template_id")
     private BankAccountTemplate template;
 
-    public BankAccountTemplate getTemplate() {
-        return template;
-    }
-    public void setTemplate(BankAccountTemplate template) {
-        this.template = template;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 }
