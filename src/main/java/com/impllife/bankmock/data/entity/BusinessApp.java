@@ -16,8 +16,9 @@ import java.util.UUID;
 public class BusinessApp {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, columnDefinition = "uuid")
     private UUID id;
+    @Column(columnDefinition = "uuid")
     private UUID accessApiToken;
     private String ibanReceiver;
     private String name;

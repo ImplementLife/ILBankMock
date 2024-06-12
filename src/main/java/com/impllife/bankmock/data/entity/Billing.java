@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Billing {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, columnDefinition = "uuid")
     private UUID id;
     private String receiverName;
     private String paymentDescription;

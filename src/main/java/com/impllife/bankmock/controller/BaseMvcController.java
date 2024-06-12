@@ -23,8 +23,6 @@ public abstract class BaseMvcController {
         return (ClientSec) authentication.getPrincipal();
     }
     public Client getClient() {
-        log.info("id1 {}, id2 {}", clientRepo.findAll().get(0).getId(), getSec().getClient().getId());
-        log.info("id1 e id2 {}", Objects.equals(clientRepo.findAll().get(0).getId(), getSec().getClient().getId()));
         UUID id = getSec().getClient().getId();
         return clientRepo.findById(id).get();
     }

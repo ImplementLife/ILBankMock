@@ -20,7 +20,7 @@ import java.util.UUID;
 public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, columnDefinition = "uuid")
     private UUID id;
     private String code16x;
     private String codeCvv;

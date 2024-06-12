@@ -16,7 +16,7 @@ import java.util.UUID;
 public class BankAccountCreateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, columnDefinition = "uuid")
     private UUID id;
 
     @ManyToOne
