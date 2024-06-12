@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class LoginUIController {
+public class RegisterMvcController {
     @Autowired
     private ClientRepo clientRepo;
 
@@ -20,6 +20,4 @@ public class LoginUIController {
         Client savedClient = clientRepo.save(client);
         return "redirect:" + referer;
     }
-
-
 }
