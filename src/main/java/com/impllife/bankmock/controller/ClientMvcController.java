@@ -3,7 +3,6 @@ package com.impllife.bankmock.controller;
 import com.impllife.bankmock.data.dto.PayRequest;
 import com.impllife.bankmock.data.entity.BankAccountAction;
 import com.impllife.bankmock.data.entity.Billing;
-import com.impllife.bankmock.data.entity.BusinessApp;
 import com.impllife.bankmock.data.entity.Client;
 import com.impllife.bankmock.data.entity.security.ClientSec;
 import com.impllife.bankmock.data.entity.security.Role;
@@ -95,7 +94,7 @@ public class ClientMvcController extends BaseMvcController {
 
     @PostMapping("/profile/pay")
     public String pay(@ModelAttribute PayRequest payRequest, Model model) {
-        err(() -> paymentService.payByCode16x(
+        doWithErrHandle(() -> paymentService.payByCode16x(
             getSec().getClient().getId(),
             payRequest.getCode16xCurrentClient(),
             payRequest.getCode16xOtherClient(),
@@ -105,30 +104,14 @@ public class ClientMvcController extends BaseMvcController {
 
     @GetMapping("/profile/requestBankAccount")
     public String requestOrder(Model model) {
-        err(() -> clientService.createOrder(getSec().getClient()), model, "Заявку надіслано");
+        doWithErrHandle(() -> clientService.createOrder(getSec().getClient()), model, "Заявку надіслано");
         return "user/result";
     }
 
     @GetMapping("/profile/requestRegisterBusinessAccount")
     public String registerBusinessAccount(Model model) {
-        err(() -> clientService.addBusinessRole(getSec().getClient()), model, "Заявку оброблено");
+        doWithErrHandle(() -> clientService.addBusinessRole(getSec().getClient()), model, "Заявку оброблено");
         return "user/result";
     }
 
-    @GetMapping("/profile/business/requestBankAccount")
-    public String requestBusinessBankAccount(Model model) {
-        err(() -> clientService.requestBusinessBankAccount(getSec().getClient()), model, "Заявку оброблено");
-        return "user/result";
-    }
-    @GetMapping("/profile/business/registerBusinessApp")
-    public String registerBusinessApp(Model model) {
-        model.addAttribute("bankAccounts", getClient().getBankAccounts());
-        return "user/business/registerApp";
-    }
-
-    @PostMapping("/profile/business/registerBusinessApp")
-    public String registerBusinessApp(@ModelAttribute BusinessApp app, Model model) {
-        err(() -> clientService.registerBusinessApp(getClient(), app), model, "Заявку оброблено");
-        return "user/result";
-    }
 }

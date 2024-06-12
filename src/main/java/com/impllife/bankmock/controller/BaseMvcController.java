@@ -25,7 +25,7 @@ public abstract class BaseMvcController {
         UUID id = getSec().getClient().getId();
         return clientRepo.findById(id).get();
     }
-    public void err(Runnable run, Model model, String message) {
+    public void doWithErrHandle(Runnable run, Model model, String message) {
         try {
             run.run();
             model.addAttribute("message", message);
@@ -34,7 +34,7 @@ public abstract class BaseMvcController {
             model.addAttribute("errorMessage", e.getMessage());
         }
     }
-    public void err(Runnable action, Model model, Runnable reactionOnErr) {
+    public void doWithErrHandle(Runnable action, Model model, Runnable reactionOnErr) {
 
     }
 }

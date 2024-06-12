@@ -18,7 +18,7 @@ public class ManagerMvcController extends BaseMvcController {
 
     @GetMapping("/manager/processingOrder")
     public String getListOrders(@RequestParam String id, @RequestParam String act, Model model) {
-        err(() -> clientService.processingCreateOrder(UUID.fromString(id), act), model, "Заявку оброблено");
+        doWithErrHandle(() -> clientService.processingCreateOrder(UUID.fromString(id), act), model, "Заявку оброблено");
         return "user/result";
     }
 }
