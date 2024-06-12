@@ -1,7 +1,5 @@
 package com.impllife.bankmock.config;
 
-import com.impllife.bankmock.services.ImageCodeGeneratorImpl;
-import com.impllife.bankmock.services.interfaces.ImageCodeGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -29,10 +27,7 @@ public class BeanConfig {
         executor.initialize();
         return executor;
     }
-    @Bean
-    public ImageCodeGenerator imageCodeGenerator() {
-        return new ImageCodeGeneratorImpl();
-    }
+
     @Bean
     public HttpMessageConverter<BufferedImage> BufferedImageHttpMessageConverter() {
         return new BufferedImageHttpMessageConverter();
@@ -56,38 +51,4 @@ public class BeanConfig {
         return mailSender;
     }
 
-    //region Springfox & actuator conflict fix
-//    @Bean
-//    public BeanPostProcessor springfoxHandlerProviderBeanPostProcessor() {
-//        return new BeanPostProcessor() {
-//
-//            @Override
-//            public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-//                if (bean instanceof WebMvcRequestHandlerProvider || bean instanceof WebFluxRequestHandlerProvider) {
-//                    customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
-//                }
-//                return bean;
-//            }
-//
-//            private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(List<T> mappings) {
-//                List<T> copy = mappings.stream()
-//                    .filter(mapping -> mapping.getPatternParser() == null)
-//                    .collect(Collectors.toList());
-//                mappings.clear();
-//                mappings.addAll(copy);
-//            }
-//
-//            @SuppressWarnings("unchecked")
-//            private List<RequestMappingInfoHandlerMapping> getHandlerMappings(Object bean) {
-//                try {
-//                    Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
-//                    field.setAccessible(true);
-//                    return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
-//                } catch (IllegalArgumentException | IllegalAccessException e) {
-//                    throw new IllegalStateException(e);
-//                }
-//            }
-//        };
-//    }
-    //endregion
 }

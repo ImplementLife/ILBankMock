@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -50,7 +52,10 @@ public class MvcController {
         return (ClientSec) authentication.getPrincipal();
     }
     private Client getClient() {
-        return clientRepo.findById(getSec().getClient().getId()).get();
+//        log.info("id1 {}, id2 {}", clientRepo.findAll().get(0).getId(), getSec().getClient().getId());
+//        log.info("id1 e id2 {}", Objects.equals(clientRepo.findAll().get(0).getId(), getSec().getClient().getId()));
+        UUID id = getSec().getClient().getId();
+        return clientRepo.findById(id).get();
     }
     private void err(Runnable run, Model model, String message) {
         try {

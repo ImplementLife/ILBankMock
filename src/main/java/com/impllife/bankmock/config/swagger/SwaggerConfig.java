@@ -26,11 +26,11 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
-            .securityContexts(List.of(securityContext()))
-            .securitySchemes(List.of(apiKey()))
+//            .securityContexts(List.of(securityContext()))
+//            .securitySchemes(List.of(apiKey()))
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.implementLife.BankMock.controller.rest"))
-            .paths(PathSelectors.any())
+//            .apis(RequestHandlerSelectors.basePackage("com.implementLife.BankMock.controller.rest"))
+//            .paths(PathSelectors.any())
             .build()
             .useDefaultResponseMessages(false)
             .apiInfo(apiInfo());

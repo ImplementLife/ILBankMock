@@ -1,4 +1,4 @@
-package com.impllife.bankmock.controller;
+package com.impllife.bankmock.controller.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

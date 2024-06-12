@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,17 +17,18 @@ import java.util.UUID;
     responseCode = "403",
     content = {@Content(schema = @Schema(hidden = true))}
 )
-
-@RequestMapping("/api")
 public interface APIController {
     @Operation(responses = {
         @ApiResponse(responseCode = "201"),
-        @ApiResponse(responseCode = "403")
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "404"),
     })
-    @PostMapping("createBilling")
     @ResponseStatus(HttpStatus.CREATED)
-    BillingInfo createBilling(@RequestBody CreateBillingRequest request);
+    ResponseEntity<BillingInfo> createBilling(CreateBillingRequest request);
 
-    @GetMapping("getBillingInfo")
-    BillingInfo getBillingInfo(@RequestParam UUID billingId);
+    @Operation(responses = {
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "403"),
+    })
+    ResponseEntity<BillingInfo> getBillingInfo(UUID billingId);
 }
