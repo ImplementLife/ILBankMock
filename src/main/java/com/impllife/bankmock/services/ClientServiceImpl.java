@@ -1,6 +1,7 @@
 package com.impllife.bankmock.services;
 
 import com.impllife.bankmock.data.entity.*;
+import com.impllife.bankmock.data.entity.security.ClientSec;
 import com.impllife.bankmock.data.entity.security.Role;
 import com.impllife.bankmock.data.repo.BusinessAppRepo;
 import com.impllife.bankmock.data.repo.ClientRepo;
@@ -8,6 +9,8 @@ import com.impllife.bankmock.data.repo.CurrencyRepo;
 import com.impllife.bankmock.services.interfaces.BankAccountService;
 import com.impllife.bankmock.services.interfaces.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,8 +75,15 @@ public class ClientServiceImpl implements ClientService {
         String roles = clientInDB.getRoles();
         if (!roles.contains(String.valueOf(Role.BUSINESS_USER.getId()))) {
             clientInDB.setRoles(roles + Role.BUSINESS_USER.getId());
+            ClientSec sec = getSec();
+            sec.addRole(Role.BUSINESS_USER);
         }
         clientRepo.save(clientInDB);
+    }
+
+    public ClientSec getSec() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (ClientSec) authentication.getPrincipal();
     }
 
     @Override

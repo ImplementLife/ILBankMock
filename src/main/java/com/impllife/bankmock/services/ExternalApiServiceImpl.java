@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 @Service
@@ -36,6 +37,9 @@ public class ExternalApiServiceImpl implements ExternalApiService {
         }
         if (!app.getAccessApiToken().equals(request.getAccessToken())) {
             throw new IllegalArgumentException("accessToken doesn't valid");
+        }
+        if (new BigDecimal(request.getUnits()).compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("units must be positive value");
         }
 
         Billing billing = new Billing();

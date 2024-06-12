@@ -24,4 +24,8 @@ public class BankAccountAction {
     private String sum;
     private String description;
     private Date date;
+
+    public String getFormatsDate() {
+        return new SimpleDateFormat().format(date);
+    }
 }

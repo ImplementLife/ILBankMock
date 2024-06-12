@@ -1,9 +1,20 @@
 INSERT INTO currency
 (name, code, codeL)
 VALUES
-('гривня', 'UAH', '$');
+('Гривня', 'UAH', '$');
 
 INSERT INTO client
 (id, first_Name, last_Name, middle_Name, phone_Number, email, pass, roles)
 VALUES
-('2D1EBC5B7D2741979CF0E84451C5BBB1', 'firstName', 'lastName', 'middleName', 'sa', 'sa', 'password', 'U');
+('2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1', 'firstName', 'lastName', 'middleName', 'sa', 'sa', 'password', 'UB');
+
+INSERT INTO BANK_ACCOUNT
+(ID, CODE16X, CODE_CVV, DATE_CREATE, IBAN, NAME, SUM_BANKNOTE, SUM_PENNY, CLIENT_ID, CURRENCY_ID)
+VALUES
+('1fcad532-dd10-4bec-accc-63e03f2975c0', '4921084817980118', '377', '2024-06-12 18:08:32.686', 'UA96911590910812320000046953190241', 'Картка Універсальна', 14509, 36, '2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1', 1),
+('de56315f-b22a-4a9f-889c-b03a9299ddcd', '1308781094075362', '784', '2024-06-12 18:08:32.686', 'UA15442048694686350000040453069726', 'Картка Універсальна', 2563, 84, '2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1', 1);
+
+INSERT INTO BUSINESS_APP
+(ID, ACCESS_API_TOKEN, IBAN_RECEIVER, NAME, NEED_SEND_RESULT, URL_SEND_RESULT, CLIENT_ID)
+VALUES
+('5e75e0f8-5832-4e91-8aa0-378bfa77e320', 'cde72111-3919-479e-8737-900ff1e2bbde', 'UA96911590910812320000046953190241', 'Split', 'FALSE', '', '2d1ebc5b-7d27-4197-9cf0-e84451c5bbb1');
