@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -65,11 +66,14 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void addBusinessRole(Client client) {
-        String roles = client.getRoles();
-        if (!roles.contains("" + Role.BUSINESS_USER.getId())) {
-            client.setRoles(roles + Role.BUSINESS_USER.getId());
+        Optional<Client> oClientInDB = clientRepo.findById(client.getId());
+        Client clientInDB = oClientInDB.orElseThrow(() -> new IllegalArgumentException("Client not found"));
+
+        String roles = clientInDB.getRoles();
+        if (!roles.contains(String.valueOf(Role.BUSINESS_USER.getId()))) {
+            clientInDB.setRoles(roles + Role.BUSINESS_USER.getId());
         }
-        clientRepo.save(client);
+        clientRepo.save(clientInDB);
     }
 
     @Override

@@ -35,6 +35,7 @@ public abstract class BaseMvcController {
         } catch (Exception e) {
             model.addAttribute("error", true);
             model.addAttribute("errorMessage", e.getMessage());
+            log.error(e.getMessage(), e);
         }
     }
     public void doWithErrHandle(Runnable action, Model model, Runnable reactionOnErr) {

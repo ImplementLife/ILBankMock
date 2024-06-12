@@ -28,12 +28,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-            <version>2.5.6</version>
-        </dependency>
-
         <!-- region web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,6 +43,23 @@
         </dependency>
         <!-- endRegion web -->
 
+        <!-- region spring-security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- endRegion spring-security -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.5.6</version>
+        </dependency>
+
         <!-- region QR code generator -->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -62,16 +73,6 @@
         </dependency>
         <!-- endRegion QR code generator -->
 
-        <!-- region spring-security -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <!-- endRegion spring-security -->
 
         <!-- region swagger -->
         <dependency>
@@ -112,12 +113,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <executions>
-                    <execution>
+                    &lt;!&ndash;<execution>
                         <id>docker-clean</id>
                         <phase>install</phase>
                         <goals><goal>exec</goal></goals>
@@ -133,9 +134,9 @@
                                 <successCode>1</successCode>
                             </successCodes>
                         </configuration>
-                    </execution>
+                    </execution>&ndash;&gt;
 
-                    <execution>
+                    &lt;!&ndash;<execution>
                         <id>docker-build</id>
                         <phase>install</phase>
                         <goals><goal>exec</goal></goals>
@@ -149,10 +150,10 @@
                                 <argument>.</argument>
                             </arguments>
                         </configuration>
-                    </execution>
+                    </execution>&ndash;&gt;
 
-                    <!-- Login and Push the image to a docker repo. -->
-                    <!--<execution>
+                    &lt;!&ndash; Login and Push the image to a docker repo. &ndash;&gt;
+                    &lt;!&ndash;<execution>
                         <id>docker-login</id>
                         <phase>deploy</phase>
                         <goals><goal>exec</goal></goals>
@@ -182,9 +183,9 @@
                                 <argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
-                    </execution>-->
+                    </execution>&ndash;&gt;
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
