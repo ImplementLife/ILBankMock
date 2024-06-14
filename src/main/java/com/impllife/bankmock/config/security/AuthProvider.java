@@ -1,6 +1,7 @@
 package com.impllife.bankmock.config.security;
 
 import com.impllife.bankmock.data.entity.security.ClientSec;
+import com.impllife.bankmock.services.SecurityClientInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

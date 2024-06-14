@@ -3,23 +3,17 @@ package com.impllife.bankmock.controller.test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.impllife.bankmock.data.dto.NotifyMessage;
-import com.impllife.bankmock.services.interfaces.ImageCodeGenerator;
 import com.impllife.bankmock.services.interfaces.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -28,12 +22,8 @@ public class TestController {
     @GetMapping("/console")
     public String hi(HttpServletRequest request) {
         log.info("\t/console is called from " + request.getRemoteAddr());
-
         return "Hello " + request.getRemoteAddr() + " ))";
     }
-
-    @Autowired
-    private ApplicationContext context;
 
     @ResponseBody
     @PostMapping("/test")
@@ -65,10 +55,6 @@ public class TestController {
         return "ok";
     }
 
-
-
-    @Autowired
-    private ImageCodeGenerator imageCodeGenerator;
     @Autowired
     private MailService mailService;
 
@@ -77,13 +63,5 @@ public class TestController {
     public String mailTst(@RequestParam String email) {
         mailService.sendMessage(email, "tst mail ");
         return "ok";
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/getCode", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> barbecueEAN13Barcode(@RequestParam String text) throws IOException {
-        ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
-        ImageIO.write(imageCodeGenerator.generateQRCodeImage(text), "png", byteArrayStream);
-        return ResponseEntity.ok(byteArrayStream.toByteArray());
     }
 }
