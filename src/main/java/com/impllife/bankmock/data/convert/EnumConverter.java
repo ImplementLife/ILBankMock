@@ -1,8 +1,8 @@
-package com.impllife.bankmock.data.converters;
+package com.impllife.bankmock.data.convert;
 
 import javax.persistence.AttributeConverter;
 
-public class EnumConverter<E, ID> implements AttributeConverter<WithId<ID>, ID> {
+public abstract class EnumConverter<E, ID> implements AttributeConverter<WithId<ID>, ID> {
     private final WithId<ID>[] values;
 
     public EnumConverter(WithId<ID>[] values) {

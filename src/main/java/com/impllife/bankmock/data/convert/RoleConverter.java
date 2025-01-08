@@ -1,4 +1,4 @@
-package com.impllife.bankmock.data.converters;
+package com.impllife.bankmock.data.convert;
 
 import com.impllife.bankmock.data.entity.security.Role;
 
