@@ -56,6 +56,7 @@ public class DBBankAccountRepo implements BankAccountRepo {
         bankAccount.setDateCreate(new Date());
         bankAccount.setCurrency(template.getCurrency());
         bankAccount.setBankAccountActions(new LinkedList<>());
+        bankAccount.setClient(bankAccount.getClient());
 
         return bankAccountRepository.save(bankAccount);
     }
